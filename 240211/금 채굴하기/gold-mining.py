@@ -27,7 +27,7 @@ def solve():
     answer = 0 # 초기화 값 0 
     for i in range(n):
         for j in range(n):
-            for cur_range in range(2*(n-1)):
+            for cur_range in range(2*(n-1)+1):
                 cost, gold_cnt = findCost(i,j,cur_range)
                 if cost >= 0 :
                     # print(i,j,cur_range,gold_cnt)
