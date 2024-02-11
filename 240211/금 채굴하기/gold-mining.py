@@ -25,7 +25,7 @@ def findCost(cur_x,cur_y,cur_range):
     return (gold_cnt * m - cost, gold_cnt)
 
 def solve():
-    answer = -1
+    answer = 0
     for i in range(n):
         for j in range(n):
             for cur_range in range(n):
