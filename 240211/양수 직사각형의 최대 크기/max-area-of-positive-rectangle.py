@@ -17,8 +17,8 @@ def solve():
 
             for k in range(n):
                 for l in range(m):
-
-                    answer = max(answer,getSummation(i,j,k,l))
+                    if i <= k and j <= l : 
+                        answer = max(answer,getSummation(i,j,k,l))
     return int(answer)
 
 print(solve())
