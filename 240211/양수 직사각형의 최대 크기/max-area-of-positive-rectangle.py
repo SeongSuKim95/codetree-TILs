@@ -19,6 +19,6 @@ def solve():
                 for l in range(m):
 
                     answer = max(answer,getSummation(i,j,k,l))
-    return answer
+    return int(answer)
 
 print(solve())
