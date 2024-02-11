@@ -6,12 +6,12 @@ def getSummation(x1,y1,x2,y2):
     for i in range(x1,x2+1):
         for j in range(y1,y2+1):
             if grid[i][j] <= 0 :
-                return 0
-    return (x2 - x1 + 1) * (y2 - y1 +1)
+                return -1
+    return (x2 - x1 + 1) * (y2 - y1 + 1)
 
 def solve():
 
-    answer = 0
+    answer = -1
     for i in range(n):
         for j in range(m):
 
@@ -19,7 +19,6 @@ def solve():
                 for l in range(m):
 
                     answer = max(answer,getSummation(i,j,k,l))
-
     return answer
 
 print(solve())
