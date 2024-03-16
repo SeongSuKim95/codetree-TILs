@@ -9,10 +9,10 @@ def explosion(curRow,curCol,grid):
     
     curRange = grid[curRow][curCol]
     dxys= [(-1,0),(1,0),(0,-1),(0,1)]
-    for _ in range(curRange):
+    for r in range(curRange):
         for dx,dy in dxys:
-            if inRange(curRow+dx,curCol+dy):
-                grid[curRow+dx][curCol+dy] = 0
+            if inRange(curRow+r*dx,curCol+r*dy):
+                grid[curRow+r*dx][curCol+r*dy] = 0
     return grid
 
 def gravity(grid):
