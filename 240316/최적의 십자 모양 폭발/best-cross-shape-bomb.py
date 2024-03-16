@@ -45,7 +45,7 @@ def checkPair(arr):
                 cnt += 1
     return cnt
 
-answer = -1
+answer = 0
 for row in range(N):
     for col in range(N):
         gridTemp = [row[:] for row in grid]
