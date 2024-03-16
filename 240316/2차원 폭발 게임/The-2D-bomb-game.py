@@ -6,24 +6,32 @@ grid = [list(map(int,input().split())) for _ in range(N)]
 
 def explode():
     global grid    
-    explodeFlag = False
     for col in range(N):
+        explodeFlag = True
         curArr = [grid[i][col] for i in range(N)] + [0]
-        curCnt = 1
-        for Idx in range(N):
-            if curArr[Idx] and curArr[Idx] == curArr[Idx+1]:
-                curCnt += 1
-            else : 
-                if curCnt >= M :
-                    for i in range(Idx,Idx-curCnt,-1):
-                        curArr[i] = 0
-                    explodeFlag = True
-                curCnt = 1 # 초기화
-
+        while explodeFlag :
+            explodeFlag = False
+            
+            curCnt = 1
+            # print(curArr,col)
+            for Idx in range(N):
+                if curArr[Idx] and curArr[Idx] == curArr[Idx+1]:
+                    curCnt += 1
+                else : 
+                    if curCnt >= M :
+                        for i in range(Idx,Idx-curCnt,-1):
+                            curArr[i] = 0
+                        explodeFlag = True
+                    curCnt = 1 # 초기화
+            tmpArr, tmpIdx = [0] * N, N-1
+            for row in range(N-1,-1,-1):
+                if curArr[row]:
+                    tmpArr[tmpIdx] = curArr[row]
+                    tmpIdx -= 1
+            for i in range(N):
+                curArr[i] = tmpArr[i]
         for row in range(N):
             grid[row][col] = curArr[row]
-
-    return explodeFlag # False 일 경우 더이상 폭발 진행 안된 것
 
 def gravity():
     global grid
@@ -62,16 +70,11 @@ def countNonzero():
 
 for _ in range(K):
     # 1. explosion
-    Flag = True
-    while Flag :  
-        Flag = explode()
-        gravity()
+    explode()
     # 2. 회전
     rotateClock()
-# K번 회전 후
-Flag = True
-while Flag:
-    Flag = explode()
     gravity()
+# K번 회전 후
+explode()
 
 print(countNonzero())
