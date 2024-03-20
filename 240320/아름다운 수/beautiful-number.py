@@ -27,7 +27,7 @@ def select(idx):
         if is_beautiful():
             answer += 1
         return
-    for i in range(1,n+1):
+    for i in range(1,5):
         seq.append(i)
         select(idx+1)
         seq.pop()
