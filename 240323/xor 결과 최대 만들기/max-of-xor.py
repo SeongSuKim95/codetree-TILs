@@ -7,7 +7,7 @@ def selectNum(curr_num, cnt):
 
     if curr_num == n + 1:
         if cnt == m :
-           xor = 1 
+           xor = 0
            for elem in selected:
                 xor ^= elem
            answer = max(xor,answer)
