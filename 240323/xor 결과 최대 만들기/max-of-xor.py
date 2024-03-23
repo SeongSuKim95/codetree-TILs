@@ -1,7 +1,7 @@
 n,m = list(map(int,input().split()))
 
 selected = []
-answer = 0
+answer = 1
 def selectNum(curr_num, cnt):
     global answer
 
