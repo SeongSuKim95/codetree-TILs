@@ -1,33 +1,30 @@
-n,m,k = list(map(int,input().split()))
+# 변수 선언 및 입력:
+n, m, k = tuple(map(int, input().split()))
+nums = list(map(int, input().split()))
+pieces = [1 for _ in range(k)] # 말들의 현재 위치
 
-turns = list(map(int,input().split()))
-# 턴의 수, 윷놀이판 길이, 말의 수
-# 초기 말 상태 : [1] * k
-# 턴당 갈 수 있는 거리 : [2,4,2,4]
+ans = 0
 
-assigned = []
-answer = -1
 def calc():
-    horses = [1] * (k + 1)
     score = 0
-    for turn, horse in zip(turns,assigned):
-        horses[horse] += turn
-    # print(horses)
-    for horse in horses[1:] :
-        if horse >= m :
+    for piece in pieces:
+        if piece >= m :
             score += 1
     return score
 
-def selectHorse(turnIdx):
-    global answer
-    if turnIdx == n : 
-        answer = max(answer,calc())
-        return
+def select(cnt): # 턴 별로 선택
+    global ans
+    if cnt == n :
+        ans = max(ans,calc())
+        return 
     
-    for i in range(1,k+1):
-        assigned.append(i)
-        selectHorse(turnIdx+1)
-        assigned.pop()
+    for i in range(k) : # k개의 말에 대하여
+        if pieces[i] >= m :
+            continue
+        pieces[i] += nums[cnt]
+        select(cnt+1)
+        pieces[i] -= nums[cnt]
 
-selectHorse(0)
-print(answer)
+
+select(0)
+print(ans)
