@@ -8,14 +8,15 @@ ans = 0
 def calc():
     score = 0
     for piece in pieces:
-        if piece >= m :
-            score += 1
+        score += (piece >= m)
     return score
 
 def select(cnt): # 턴 별로 선택
     global ans
+
+    ans = max(ans,calc())
+    
     if cnt == n :
-        ans = max(ans,calc())
         return 
     
     for i in range(k) : # k개의 말에 대하여
