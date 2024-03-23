@@ -1,8 +1,8 @@
 n,m = list(map(int,input().split()))
-
+lst = list(map(int,input().split()))
 selected = []
 answer = 0
-def selectNum(curr_num, cnt):
+def selectNum(curr_idx, cnt):
     global answer
 
     if cnt == m :
@@ -11,15 +11,16 @@ def selectNum(curr_num, cnt):
             xor ^= elem
         answer = max(xor,answer)
         return
-    if curr_num == n+1:
+
+    if curr_idx == n:
         return
-        
-    selected.append(curr_num)
-    selectNum(curr_num+1,cnt + 1)
+
+    selected.append(lst[curr_idx])
+    selectNum(curr_idx+1,cnt + 1)
     selected.pop()
 
-    selectNum(curr_num+1,cnt)
+    selectNum(curr_idx+1,cnt)
 
 
-selectNum(1,0)
+selectNum(0,0)
 print(answer)
