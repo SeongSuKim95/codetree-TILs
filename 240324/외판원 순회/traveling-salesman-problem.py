@@ -11,7 +11,10 @@ def choose(idx):
         route = [1] + arr + [1]
         cost = 0
         for i in range(n):
-            cost += grid[route[i]-1][route[i+1]-1]
+            if grid[route[i]-1][route[i+1]-1]:
+                cost += grid[route[i]-1][route[i+1]-1]
+            else :
+                return
         answer = min(answer,cost)
         return
 
