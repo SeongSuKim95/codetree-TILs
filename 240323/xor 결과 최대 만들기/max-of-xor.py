@@ -1,13 +1,13 @@
 n,m = list(map(int,input().split()))
 
 selected = []
-answer = 1
+answer = 0
 def selectNum(curr_num, cnt):
     global answer
 
     if curr_num == n + 1:
         if cnt == m :
-            xor = 0
+            xor = 1
             for elem in selected:
                 xor ^= elem
             # print(selected,xor)
