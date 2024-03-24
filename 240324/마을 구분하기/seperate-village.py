@@ -5,7 +5,8 @@ grid = [list(map(int,input().split())) for _ in range(N)]
 visited = [[False] * N for _ in range(N)]
 
 dxs,dys = [-1,1,0,0],[0,0,-1,1]
-
+peopleNum = 1
+peopleList = []
 def inRange(x,y):
 
     return 0<=x<N and 0<=y<N
@@ -20,31 +21,24 @@ def printArr(arr):
         print(*row)
     print()
 
-def dfs(cx,cy,color):
-
+def dfs(cx,cy):
+    global peopleNum
     for dx,dy in zip(dxs,dys):
         nx,ny = cx + dx, cy + dy
         if inRange(nx,ny):
             if canGo(nx,ny):
                 visited[nx][ny] = True
-                grid[nx][ny] = color
-                dfs(nx,ny,color)
-color = 1
+                peopleNum += 1
+                dfs(nx,ny)
 
 for i in range(N):
     for j in range(N):
         if not visited[i][j] and grid[i][j]:
-            grid[i][j] = color
-            dfs(i,j,color)
-            color += 1
+            peopleNum = 1
+            visited[i][j] = True
+            dfs(i,j)
+            peopleList.append(peopleNum)
 
-colorCnt = {i:0 for i in range(1,color)}
-
-for i in range(N):
-    for j in range(N):
-        if grid[i][j] :
-            colorCnt[grid[i][j]] += 1
-colorCnt = sorted(colorCnt.items(), key = lambda x : x[1])
-print(color-1)
-for key,value in colorCnt:
-    print(value)
+print(len(peopleList))
+for elem in sorted(peopleList):
+    print(elem)
