@@ -27,7 +27,7 @@ def dfs(cx,cy,height):
 
 safeRegions = []
 
-for height in range(1,maxHeight):
+for height in range(1,maxHeight+1):
     visited = [[False] * M for _ in range(N)]
     regionCnt = 0
     for i in range(N):
@@ -36,7 +36,7 @@ for height in range(1,maxHeight):
                 visited[i][j] = True
                 dfs(i,j,height)
                 regionCnt += 1
-    safeRegions.append((regionCnt,height))
+    safeRegions.append((height,regionCnt))
 
-safeRegions.sort(key = lambda x : (-x[0],x[1]))
+safeRegions.sort(key = lambda x : (-x[1],x[0]))
 print(*list(safeRegions[0]))
