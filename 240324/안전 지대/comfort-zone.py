@@ -27,7 +27,7 @@ def dfs(cx,cy,height):
 
 safeRegions = []
 
-for height in range(1,maxHeight+1):
+for height in range(1,maxHeight):
     visited = [[False] * M for _ in range(N)]
     regionCnt = 0
     for i in range(N):
