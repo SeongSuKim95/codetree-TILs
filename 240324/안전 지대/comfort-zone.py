@@ -1,4 +1,5 @@
 N, M = list(map(int,input().split()))
+sys.setrecursionlimit(2500)
 
 grid = [list(map(int,input().split())) for _ in range(N)]
 
