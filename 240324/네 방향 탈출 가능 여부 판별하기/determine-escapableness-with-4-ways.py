@@ -17,16 +17,15 @@ def canGo(x,y):
 def bfs(x,y):
 
     q = deque([(x,y)])
-    visited[x][y] = True
     while q :
         cur_x,cur_y = q.popleft()
-        visited[cur_x][cur_y] = True
         for dx,dy in zip(dxs,dys):
             nx,ny = cur_x+dx,cur_y+dy
             if inRange(nx,ny):
                 if canGo(nx,ny):
+                    visited[nx][ny] = True
                     q.append((nx,ny))
-
+visited[0][0] = True
 bfs(0,0)
 
 print(int(visited[N-1][M-1]))
