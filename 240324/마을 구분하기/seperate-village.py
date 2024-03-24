@@ -34,6 +34,7 @@ color = 1
 for i in range(N):
     for j in range(N):
         if not visited[i][j] and grid[i][j]:
+            grid[i][j] = color
             dfs(i,j,color)
             color += 1
 
@@ -43,7 +44,6 @@ for i in range(N):
     for j in range(N):
         if grid[i][j] :
             colorCnt[grid[i][j]] += 1
-
 colorCnt = sorted(colorCnt.items(), key = lambda x : x[1])
 print(color-1)
 for key,value in colorCnt:
