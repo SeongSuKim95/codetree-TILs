@@ -52,8 +52,11 @@ bfs()
 
 for i in range(N):
     for j in range(N):
-        if not dist[i][j] and not grid[i][j] :
+        if not dist[i][j] :
             dist[i][j] = -1
+
+for sx,sy in starts:
+    dist[sx][sy] = 0
 
 for row in dist:
     print(*row)
