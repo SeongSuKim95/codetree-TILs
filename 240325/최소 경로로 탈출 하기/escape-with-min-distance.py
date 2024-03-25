@@ -5,11 +5,11 @@ N, M = list(map(int,input().split()))
 grid = [list(map(int,input().split())) for _ in range(N)]
 
 dxs,dys = [-1,1,0,0],[0,0,-1,1]
-visited = [[False] * N for _ in range(N)]
+visited = [[False] * M for _ in range(N)]
 
 def inRange(x,y):
     
-    return 0<=x<N and 0<=y<N
+    return 0<=x<N and 0<=y<M
 
 def bfs():
 
@@ -26,7 +26,7 @@ def bfs():
                     q.append((nx,ny))
 
 bfs()
-if visited[N-1][N-1]:
-    print(grid[N-1][N-1]-1)
+if visited[N-1][M-1]:
+    print(grid[N-1][M-1]-1)
 else :
     print(-1)
