@@ -38,14 +38,14 @@ def bfs():
     
     for sx,sy in starts:
         q.append((sx,sy))
-        visited[sx][sy] == True
+        visited[sx][sy] = True
     
     while q :
         cx,cy = q.popleft()
         for dx,dy in zip(dxs,dys):
             nx,ny = cx+dx, cy+dy
             if inRange(nx,ny):
-                if not visited[nx][ny] and grid[nx][ny] != 1 and not dist[nx][ny]: 
+                if not visited[nx][ny] and grid[nx][ny] != 1 : 
                     visited[nx][ny] = True
                     dist[nx][ny] = dist[cx][cy] + 1
                     q.append((nx,ny))    
