@@ -19,14 +19,14 @@ def bfs():
     q = deque([(sx,sy)])
     while q :
         cx, cy = q.popleft()
+        if (cx,cy) == (ex,ey):
+            return True
         for dx, dy in zip(dxs,dys):
             nx, ny = cx + dx, cy+ dy
             if inRange(nx,ny):
                 if not visited[nx][ny] :
                     visited[nx][ny] = True
                     grid[nx][ny] = grid[cx][cy] + 1
-                    if (nx,ny) == (ex,ey):
-                        return True
                     q.append((nx,ny))
     return False
 
