@@ -7,7 +7,7 @@ def bfs():
 
     q = deque()
     q.append((N,0))
-    nums.add(q)
+    nums.add(N)
 
     while q :
         curNum,curCnt = q.popleft()
