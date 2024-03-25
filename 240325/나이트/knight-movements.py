@@ -26,10 +26,10 @@ def bfs():
                     visited[nx][ny] = True
                     grid[nx][ny] = grid[cx][cy] + 1
                     if (nx,ny) == (ex,ey):
-                        return
+                        return True
                     q.append((nx,ny))
-bfs()
-if grid[ex][ey]:
+    return False
+if bfs():
     print(grid[ex][ey])
 else:
     print(-1)
