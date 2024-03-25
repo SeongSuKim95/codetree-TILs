@@ -29,6 +29,12 @@ def bfs():
                         return True
                     q.append((nx,ny))
     return False
+
+def printArr(arr):
+
+    for row in arr:
+        print(*row)
+
 if bfs():
     print(grid[ex][ey])
 else:
