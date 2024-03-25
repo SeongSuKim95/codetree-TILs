@@ -52,9 +52,10 @@ def bfs():
 def select(idx,cnt):
     global answer
 
-    if idx == N * N :
-        if cnt == K :
-            answer = max(answer,bfs())
+    if cnt == K :
+        answer = max(answer,bfs())
+        return
+    if idx == N*N:
         return
     
     select(idx+1,cnt)
