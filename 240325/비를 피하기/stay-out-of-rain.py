@@ -45,7 +45,7 @@ def bfs():
         for dx,dy in zip(dxs,dys):
             nx,ny = cx+dx, cy+dy
             if inRange(nx,ny):
-                if not visited[nx][ny] and grid[nx][ny] != 1 : 
+                if not visited[nx][ny] and grid[nx][ny] != 1 and not dist[nx][ny]: 
                     visited[nx][ny] = True
                     dist[nx][ny] = dist[cx][cy] + 1
                     q.append((nx,ny))    
