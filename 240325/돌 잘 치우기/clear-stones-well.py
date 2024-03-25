@@ -49,15 +49,16 @@ def bfs(rocks):
 def choose(idx,cnt):
     global answer
 
-    if idx == len(rockPos):
-        return
-        
+
     if cnt == m :
         regionCnt = bfs(mRocks)
         answer = max(answer,regionCnt)
         return
 
 
+    if idx == len(rockPos):
+        return
+        
     choose(idx+1,cnt)
 
     mRocks.append(rockPos[idx])
