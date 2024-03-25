@@ -3,7 +3,7 @@ N,M,K = list(map(int,input().split()))
 grid = [list(map(int,input().split())) for _ in range(N)]
 
 K = K - 1
-
+targetRow = N - 1 
 for i in range(N):
     flag = False
     for c in range(K,K+M):
