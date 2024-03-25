@@ -29,4 +29,7 @@ def bfs():
                         return
                     q.append((nx,ny))
 bfs()
-print(grid[ex][ey])
+if grid[ex][ey]:
+    print(grid[ex][ey])
+else:
+    print(-1)
