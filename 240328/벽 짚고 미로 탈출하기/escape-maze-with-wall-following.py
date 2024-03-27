@@ -22,6 +22,8 @@ dxs,dys = [0, 1, 0, -1], [1, 0, -1, 0]
 curDir = 0
 cnt = 0
 sx,sy = cx,cy 
+
+
 def inRange(x,y):
 
     return 0<=x<N and 0<=y<N
@@ -30,10 +32,11 @@ def inRange(x,y):
 
 def move(cx,cy):
     global cnt, curDir
-    global sx,sy
+    visited = [[False] * N for _ in range(N)]
 
-    while True : 
-
+    while visited[cx][cy] == False : 
+        
+        visited[cx][cy] = True
         nx ,ny = cx + dxs[curDir], cy + dys[curDir]
 
         # 이동 가능
@@ -43,15 +46,9 @@ def move(cx,cy):
                 wx, wy = nx + dxs[(curDir + 1) % 4], ny + dys[(curDir + 1) % 4]
                 if grid[wx][wy]: # 벽이 있음
                     cx, cy = nx, ny
-                    if (cx,cy) == (sx,sy):
-                        cnt = -1
-                        break
                     cnt += 1
                 else : # 벽이 없음
                     cx, cy = wx, wy
-                    if (cx,cy) == (sx,sy):
-                        cnt = -1
-                        break
                     cnt += 2
                     curDir = ( curDir + 1 ) % 4
             # 바라보고 있는 방향으로 이동하지 못할 경우
