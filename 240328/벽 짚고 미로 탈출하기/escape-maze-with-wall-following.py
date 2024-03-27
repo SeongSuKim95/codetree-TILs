@@ -21,6 +21,7 @@ dxs,dys = [0, 1, 0, -1], [1, 0, -1, 0]
 # 시작 : 우측
 curDir = 0
 cnt = 0
+sx,sy = cx,cy 
 def inRange(x,y):
 
     return 0<=x<N and 0<=y<N
@@ -29,10 +30,15 @@ def inRange(x,y):
 
 def move(cx,cy):
     global cnt, curDir
+    global sx,sy
 
     while True : 
-        nx ,ny = cx + dxs[curDir], cy + dys[curDir]
 
+        nx ,ny = cx + dxs[curDir], cy + dys[curDir]
+        
+        if (nx,ny) == (sx,sy):
+            cnt = -1
+            break
         # 이동 가능
         if inRange(nx,ny):
             if grid[nx][ny] == 0 :  # 없음
@@ -48,7 +54,7 @@ def move(cx,cy):
             # 바라보고 있는 방향으로 이동하지 못할 경우
             elif grid[nx][ny] == 1 :
                 curDir = ( curDir - 1 + 4 ) % 4
-        else :
+        else : # 맵 벗어남
             cnt += 1
             break
 
