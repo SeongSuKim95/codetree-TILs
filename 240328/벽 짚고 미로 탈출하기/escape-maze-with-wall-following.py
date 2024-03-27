@@ -35,20 +35,23 @@ def move(cx,cy):
     while True : 
 
         nx ,ny = cx + dxs[curDir], cy + dys[curDir]
-        
-        if (nx,ny) == (sx,sy):
-            cnt = -1
-            break
+
         # 이동 가능
         if inRange(nx,ny):
             if grid[nx][ny] == 0 :  # 없음
-                
-                wx, wy = nx + dxs[(curDir + 1 ) % 4], ny + dys[(curDir + 1) % 4]
+                # 벽 좌표 구하기
+                wx, wy = nx + dxs[(curDir + 1) % 4], ny + dys[(curDir + 1) % 4]
                 if grid[wx][wy]: # 벽이 있음
                     cx, cy = nx, ny
+                    if (cx,cy) == (sx,sy):
+                        cnt = -1
+                        break
                     cnt += 1
                 else : # 벽이 없음
                     cx, cy = wx, wy
+                    if (cx,cy) == (sx,sy):
+                        cnt = -1
+                        break
                     cnt += 2
                     curDir = ( curDir + 1 ) % 4
             # 바라보고 있는 방향으로 이동하지 못할 경우
