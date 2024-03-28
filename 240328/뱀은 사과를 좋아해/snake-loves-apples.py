@@ -1,9 +1,5 @@
 N, M, K = list(map(int,input().split()))
 
-moves = [
-     tuple(map(lambda x : x if x.isalpha() else int(x),input().split()))
-     for _ in range(K)
-]
 dirs = {
     'R' : (0,1),
     'U' : (-1,0),
@@ -12,6 +8,7 @@ dirs = {
 }
 
 grid = [[0] * N for _ in range(N)]
+
 apples = [
     tuple(map(lambda x : int(x)-1, input().split()))
     for _ in range(M)
@@ -19,6 +16,12 @@ apples = [
 
 for ax,ay in apples:
     grid[ax][ay] = 2
+
+
+moves = [
+     tuple(map(lambda x : x if x.isalpha() else int(x),input().split()))
+     for _ in range(K)
+]
 
 def inRange(x,y):
 
