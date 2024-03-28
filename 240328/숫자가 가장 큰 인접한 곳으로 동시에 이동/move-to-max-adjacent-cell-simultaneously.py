@@ -37,7 +37,7 @@ def simulate():
                     for dx,dy in zip(dxs,dys):
                         nx,ny = i + dx, j + dy
                         if inRange(nx,ny):
-                            if grid[nx][ny] > curNum : 
+                            if grid[nx][ny] >= curNum : 
                                 curNum = grid[nx][ny]
                                 nextx,nexty = nx,ny
                     nextCount[nextx][nexty] += 1
