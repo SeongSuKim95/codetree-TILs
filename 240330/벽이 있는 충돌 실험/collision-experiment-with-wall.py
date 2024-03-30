@@ -43,7 +43,7 @@ def isDuplicate(arr1,arr2):
 def simulate():
     gridHistory = []
 
-    while True :
+    for _ in range(2*N) :
         # printArr(grid)
         nextGrid = [[EMPTY for _ in range(N)] for _ in range(N)]
         nextGridCnt = [[0 for _ in range(N)] for _ in range(N)]
@@ -67,18 +67,18 @@ def simulate():
                 else:
                     grid[i][j] = EMPTY
 
-        curGrid = [
-            row[:] for row in grid
-        ]
-        if len(gridHistory) < 2 * N:
-            gridHistory.append(curGrid)
-        else :
-            isValid = isDuplicate(gridHistory[0],curGrid)
-            if isValid : 
-                break
-            else :
-                gridHistory = gridHistory[1:]
-                gridHistory.append(curGrid)
+        # curGrid = [
+        #     row[:] for row in grid
+        # ]
+        # if len(gridHistory) < 2 * N:
+        #     gridHistory.append(curGrid)
+        # else :
+        #     isValid = isDuplicate(gridHistory[0],curGrid)
+        #     if isValid : 
+        #         break
+        #     else :
+        #         gridHistory = gridHistory[1:]
+        #         gridHistory.append(curGrid)
 def printNumballs():
     cnt = 0
     for i in range(N):
