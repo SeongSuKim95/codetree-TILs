@@ -45,7 +45,8 @@ def simulate():
 
     while True :
         # printArr(grid)
-        nextGrid = [[False for _ in range(N)] for _ in range(N)]
+        nextGrid = [[EMPTY for _ in range(N)] for _ in range(N)]
+        nextGridCnt = [[0 for _ in range(N)] for _ in range(N)]
         # printArr(grid)
         for cx in range(N):
             for cy in range(N):
@@ -54,16 +55,14 @@ def simulate():
                     dx,dy = dirs[cdir][0], dirs[cdir][1]
                     nx,ny = cx + dx, cy + dy
                     if inRange(nx,ny):
-                        if not nextGrid[nx][ny] :
-                            nextGrid[nx][ny] = cdir
-                        else:
-                            nextGrid[nx][ny] = EMPTY
+                        nextGrid[nx][ny] = cdir
+                        nextGridCnt[nx][ny] += 1
                     else :                     
-                        nextGrid[cx][cy]= ((cdir+2)%len(dirs)) # 반대 방향으로 바꾸기        
-        
+                        nextGrid[cx][cy] = ((cdir+2)%len(dirs)) # 반대 방향으로 바꾸기        
+                        nextGridCnt[cx][cy] += 1
         for i in range(N):
             for j in range(N):
-                if nextGrid[i][j] : 
+                if nextGrid[i][j] != EMPTY and nextGridCnt[i][j] == 1 : 
                     grid[i][j] = nextGrid[i][j]
                 else:
                     grid[i][j] = EMPTY
