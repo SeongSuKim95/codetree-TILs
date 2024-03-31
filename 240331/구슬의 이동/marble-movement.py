@@ -71,7 +71,7 @@ def move():
                 grid[i][j] = nextGrid[i][j][:]
             else :
                 nextList = sorted(nextList,key = lambda x : (-x[0],-x[1]))
-                grid[i][j] = nextList[:k]
+                grid[i][j] = nextList[:k][:]
 
 for _ in range(M):
     move()
