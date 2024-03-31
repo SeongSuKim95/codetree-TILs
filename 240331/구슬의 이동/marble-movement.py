@@ -67,7 +67,7 @@ def move():
     for i in range(N):
         for j in range(N):
             nextList = nextGrid[i][j][:]
-            if len(nextList) < k : 
+            if len(nextList) <= k : 
                 grid[i][j] = nextGrid[i][j][:]
             else :
                 nextList = sorted(nextList,key = lambda x : (-x[0],-x[1]))
