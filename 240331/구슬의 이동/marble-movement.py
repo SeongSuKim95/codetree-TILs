@@ -73,7 +73,7 @@ def move():
                 nextList = sorted(nextList,key = lambda x : (-x[0],-x[1]))
                 grid[i][j] = nextList[:k][:]
 
-for _ in range(M):
+for _ in range(t):
     move()
 
 answer = 0
