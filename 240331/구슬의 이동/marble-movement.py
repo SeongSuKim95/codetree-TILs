@@ -51,9 +51,9 @@ def move():
 
     for cx in range(N):
         for cy in range(N):
-            curx,cury = cx,cy
             if grid[cx][cy] != []:               
                 for cv,cnum,cdir in grid[cx][cy]:
+                    curx,cury = cx,cy
                     # 현재 공 이동
                     for _ in range(cv):
                         cdx, cdy = dxs[cdir], dys[cdir]
@@ -66,8 +66,8 @@ def move():
                             curx,cury = curx + cdx, cury + cdy
                     
                     # 도착점을 nextGrid 에 기록
-                    nextGrid[curx][cury].append((cv,cnum,cdir))
-      
+                    nextGrid[curx][cury].append((cv,cnum,cdir)) 
+                
     for i in range(N):
         for j in range(N):
             nextList = nextGrid[i][j][:]
@@ -76,7 +76,7 @@ def move():
             else :
                 nextList = sorted(nextList,key = lambda x : (-x[0],-x[1]))
                 grid[i][j] = nextList[:k][:]
-    
+
 # printArr(grid)
 for _ in range(t):
     move()
