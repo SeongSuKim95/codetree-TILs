@@ -15,6 +15,11 @@ def inRange(x,y):
 # r,c,d,v
 # d : U,D,R,L
 # v : 1초에 v 칸 이동
+# v,num,dir
+# 0 : U
+# 1 : R
+# 2 : D
+# 3 : L
 dxs,dys = [-1,0,1,0],[0,1,0,-1]
 def convertInput(input):
     dirMap = {
@@ -62,8 +67,7 @@ def move():
                     
                     # 도착점을 nextGrid 에 기록
                     nextGrid[curx][cury].append((cv,cnum,cdir))
-    
-    
+      
     for i in range(N):
         for j in range(N):
             nextList = nextGrid[i][j][:]
@@ -72,7 +76,8 @@ def move():
             else :
                 nextList = sorted(nextList,key = lambda x : (-x[0],-x[1]))
                 grid[i][j] = nextList[:k][:]
-
+    
+# printArr(grid)
 for _ in range(t):
     move()
 
