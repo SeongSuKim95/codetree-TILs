@@ -37,9 +37,7 @@ def simulate():
     dx,dy = dxs[cdir],dys[cdir]
     nx,ny = cx - dx, cy - dy
     
-    if canGo(nx,ny):
-        visited[nx][ny] = True
-        answer += 1
+    if not grid[nx][ny]:
         cx,cy = nx,ny 
         return True
         
