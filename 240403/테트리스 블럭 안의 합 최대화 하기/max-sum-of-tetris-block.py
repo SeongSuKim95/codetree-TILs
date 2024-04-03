@@ -41,13 +41,13 @@ def choose(cx,cy,cnt):
             block.pop()
             visited[nx][ny] = False
             
-            if cnt == 1:
+            # if cnt == 1:
 
-                block.append((nx,ny))
-                visited[nx][ny] = True
-                choose(cx,cy,cnt+1)
-                block.pop()
-                visited[nx][ny] = False
+            #     block.append((nx,ny))
+            #     visited[nx][ny] = True
+            #     choose(cx,cy,cnt+1)
+            #     block.pop()
+            #     visited[nx][ny] = False
     
 for cx in range(N):
     for cy in range(M):
