@@ -86,7 +86,7 @@ def clone():
 def kill():
     global answer
     dxs,dys = [-1,-1,1,1],[1,-1,1,-1]
-    maxKilledPos = (0,1e9,1e9)
+    maxKilledPos = []
 
     for i in range(N):
         for j in range(N):
@@ -101,9 +101,9 @@ def kill():
                                 killedCnt += grid[nx][ny]
                             else :
                                 break
-                maxKilledPos = min((-killedCnt,cx,cy),maxKilledPos)
-    killedCnt, px,py = maxKilledPos
-    answer -= killedCnt
+                maxKilledPos.append((killedCnt,cx,cy))
+    killedCnt,px,py = max(maxKilledPos)
+    answer += killedCnt
     # 이전 제초제 제거
     for i in range(N):
         for j in range(N):
