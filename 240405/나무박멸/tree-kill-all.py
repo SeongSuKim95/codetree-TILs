@@ -86,7 +86,7 @@ def clone():
 def kill():
     global answer
     dxs,dys = [-1,-1,1,1],[1,-1,1,-1]
-    maxKilledPos = (1,0,0)
+    maxKilledPos = (0,0,0)
 
     for i in range(N):
         for j in range(N):
@@ -131,16 +131,10 @@ def kill():
 
 for _ in range(M):
     grow()
-    # print("After grow")
-    # printArr(grid)
-    # printArr(cntGrid)
+
     clone()
-    # print("After clone")
-    # printArr(grid)
-    # printArr(cntGrid)
+  
     kill()
-    # print("After killed")
-# printArr(grid)
-# printArr(cntGrid)
+
 
 print(answer)
