@@ -86,7 +86,7 @@ def clone():
 def kill():
     global answer
     dxs,dys = [-1,-1,1,1],[1,-1,1,-1]
-    maxKilledPos = []
+    maxKilledPos = [(0,0,0)]
 
     for i in range(N):
         for j in range(N):
