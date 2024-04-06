@@ -28,7 +28,6 @@ for i in range(3):
 
 maxRow, maxCol, elapsedTime = 3, 3, 0
 
-
 # 행 또는 열의 숫자 세기
 def makeNewRows(rowIdx):
     global maxCol,maxRow
@@ -97,6 +96,10 @@ def printArr(arr):
 def simulate():
     global maxRow, maxCol, elapsedTime
     while True :
+        
+        if grid[r-1][c-1] == k :
+            break
+        
         if maxRow >= maxCol :
             for rowIdx in range(maxRow):
                 makeNewRows(rowIdx)
@@ -105,8 +108,6 @@ def simulate():
                 makeNewCols(colIdx)
         elapsedTime += 1
 
-        if grid[r-1][c-1] == k :
-            break
         if elapsedTime > 100 :
             elapsedTime = -1
             break
