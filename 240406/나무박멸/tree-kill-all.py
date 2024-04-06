@@ -72,7 +72,7 @@ def clone():
                 adjList = []
                 for dx,dy in zip(dxs,dys):
                     nx,ny = cx+dx, cy+dy
-                    if inRange(nx,ny) and grid[nx][ny] == EMPTY and cntGrid[nx][ny] == -1:
+                    if inRange(nx,ny) and grid[nx][ny] == EMPTY and cntGrid[nx][ny] == -1: # 제초제가 없는 경우
                         adjList.append((nx,ny))
                 if len(adjList) > 0 :
                     for adjx,adjy in adjList:
@@ -99,11 +99,14 @@ def kill():
                         if inRange(nx,ny):
                             if grid[nx][ny] > 0 : # 나무인 경우
                                 killedCnt += grid[nx][ny]
-                            else :
+                            else:
                                 break
-                maxKilledPos.append((killedCnt,cx,cy))
+                        else :
+                            break
+                maxKilledPos.append((killedCnt,-cx,-cy))
     killedCnt,px,py = max(maxKilledPos)
     answer += killedCnt
+    px,py = -px,-py
     # 이전 제초제 제거
     for i in range(N):
         for j in range(N):
@@ -117,11 +120,13 @@ def kill():
         for r in range(1,K+1):
             nx,ny = px + r*dx, py+r*dy
             if inRange(nx,ny):
-                if grid[nx][ny] >= 0 :
+                if grid[nx][ny] >= 0 : # 나무이거나 비어있는 경우
                     grid[nx][ny] = STOP
                     cntGrid[nx][ny] = C
                 else:
                     break
+            else:
+                break
 
     for i in range(N):
         for j in range(N):
@@ -131,10 +136,7 @@ def kill():
 
 for _ in range(M):
     grow()
-
     clone()
-  
     kill()
-
 
 print(answer)
