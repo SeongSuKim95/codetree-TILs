@@ -107,7 +107,7 @@ def kill():
     if maxKilledPos:
         killedCnt,px,py = max(maxKilledPos)
     else :
-        px,py,kileedCnt = 0,0,0
+        px,py,killedCnt = 0,0,0
     answer += killedCnt
     px,py = -px,-py
     # 이전 제초제 제거
