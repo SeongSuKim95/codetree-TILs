@@ -50,7 +50,7 @@ def mergeAndSplit():
 
     for i in range(N):
         for j in range(N):
-            if grid[i][j]:
+            if grid[i][j] and len(grid[i][j]) >= 2 :
                 curAtoms = grid[i][j]
                 weightSum , velocitySum, directionSum, atomNum = 0, 0, 0, len(curAtoms)
                 for cm,cs,cd in curAtoms:
@@ -69,7 +69,8 @@ def mergeAndSplit():
 
                 for nextDir in nextDirections :
                     nextGrid[i][j].append((nextWeight,nextVelocity,nextDir))
-    
+            else :
+                nextGrid[i][j] = grid[i][j][:]
     for i in range(N):
         for j in range(N):
             grid[i][j] = nextGrid[i][j][:]
