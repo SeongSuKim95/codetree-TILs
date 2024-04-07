@@ -18,7 +18,7 @@ grid = [
 
 answer = 1e9
 hospitalList = []
-
+flag = False
 for i in range(N):
     for j in range(N):
         if grid[i][j] == HOSPITAL:
@@ -38,17 +38,17 @@ def inRange(x,y):
 
 def bfs():
 
-    
+    global answer, flag
+
     dxs,dys = [-1,1,0,0],[0,0,-1,1]
-    
+
+    q = deque()
     # 병원 값은 1로, 나중에 결과 값에서 1빼주기
     steps = [
         [0] * N
         for _ in range(N)
-    ]
+    ]    
 
-    q = deque()
-    
     for hidx in selectedList:
         hx,hy = hospitalList[hidx]
         q.append((hx,hy))
@@ -68,10 +68,10 @@ def bfs():
     
     for i in range(N):
         for j in range(N):
-            if grid[i][j] == VIRUS :
-                if steps[i][j] == 0 :
-                    return -1
-    return maxStep - 1 
+            if grid[i][j] == VIRUS and steps[i][j] == 0 :
+                return
+    answer, flag = min(answer,maxStep - 1), True
+    return    
 
     
 
@@ -79,7 +79,7 @@ def choose(idx,cnt):
     global answer
 
     if cnt == M :
-        answer = min(answer,bfs())
+        bfs()
         return 
 
     if idx == len(hospitalList):
@@ -91,7 +91,10 @@ def choose(idx,cnt):
     selectedList.pop()
 
     choose(idx+1,cnt)
-    
 
 choose(0,0)
-print(answer)
+
+if flag :
+    print(answer)
+else :
+    print(-1)
