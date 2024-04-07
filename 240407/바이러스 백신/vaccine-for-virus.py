@@ -66,9 +66,12 @@ def bfs():
                 if grid[nx][ny] == VIRUS:
                     maxStep = max(maxStep, steps[nx][ny])
     
-    # printArr(steps)
-
-    return maxStep    
+    for i in range(N):
+        for j in range(N):
+            if grid[i][j] == VIRUS :
+                if steps[i][j] == 0 :
+                    return -1
+    return maxStep - 1 
 
     
 
@@ -77,7 +80,7 @@ def choose(idx,cnt):
 
     if cnt == M :
         answer = min(answer,bfs())
-        return
+        return 
 
     if idx == len(hospitalList):
         
@@ -91,4 +94,4 @@ def choose(idx,cnt):
     
 
 choose(0,0)
-print(answer-1)
+print(answer)
