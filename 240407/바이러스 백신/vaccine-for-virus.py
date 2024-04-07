@@ -54,7 +54,7 @@ def bfs():
         q.append((hx,hy))
         steps[hx][hy] = 1
     
-    maxStep = 0
+    maxStep = 1
 
     while q: 
         cx,cy = q.popleft()
