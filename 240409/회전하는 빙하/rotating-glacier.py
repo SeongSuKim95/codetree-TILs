@@ -128,7 +128,7 @@ def bfs():
                             iceCnt += 1
 
                 maxCnt = max(iceCnt, maxCnt)
-        return maxCnt
+    return maxCnt
 
 
 
