@@ -52,6 +52,7 @@ personMap = [
     for _ in range(N)
 ]
 
+printArr(grid)
 def allArrived():
 
     for pIdx,(sx,sy) in storePos.items():
@@ -156,7 +157,7 @@ def simulate():
         # 편의점에 도착하면 해당 편의점에서 멈추고, 다른 사람들은 칸을 지나가지 못함. 격자에 있는 사람들이 모두 이동한 후에 업데이트
         # t <= M 이면 t번 사람이 가장 가까이 있는 베이스 캠프에 들어감
         if elapsedTime <= M :
-            goToBaseCamp(elapsedTime)
+           goToBaseCamp(elapsedTime)
         
     return elapsedTime
 
