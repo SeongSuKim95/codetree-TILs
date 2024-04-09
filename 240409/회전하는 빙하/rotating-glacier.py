@@ -137,7 +137,8 @@ def simulate():
     for level in turnLevels:
         if level:
             turnGrid(level)
-    meltDown()
+            meltDown()
+        meltDown()
     print(countIce())
     print(bfs())
 
