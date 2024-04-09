@@ -6,7 +6,7 @@ guns = [
     for _ in range(N)
 ]
 
-GUN_EMPTY = []
+GUN_EMPTY = [0]
 NO_GUN = 0
 
 # (x,y), d, s 
@@ -27,8 +27,7 @@ gunMap = [
 
 for i in range(N):
     for j in range(N):
-        if guns[i][j]:
-            gunMap[i][j].append(guns[i][j])
+        gunMap[i][j].append(guns[i][j])
 
 # 2. 플레이어 위치를 표기할 배열 (번호, 방향, 기본 스탯, 총의 공격력(없으면 0))
 # 플레이어가 겹칠수도 있으므로, 배열로 처리
@@ -57,8 +56,8 @@ def getGun(pos,pidx,pd,ps,pgun):
     if gunMap[nx][ny] != GUN_EMPTY : 
         totalGunList = sorted(gunMap[nx][ny] + [pgun],reverse = True)
         pgun = totalGunList[0] # 가장 쎈 gun
-        if totalGunList[1:] != GUN_EMPTY :
-            gunMap[nx][ny] = totalGunList[1:]
+        if len(totalGunList[1:]) :
+            gunMap[nx][ny] = totalGunList[1:][:]
         else :
             gunMap[nx][ny] = GUN_EMPTY
     playerMap[nx][ny].append((pidx,pd,ps,pgun))
@@ -71,13 +70,14 @@ def moveOnePlayer(pIdx):
 
     nx,ny = px + dxs[pd], py + dys[pd]
 
+
     if not inRange(nx,ny):
         pd = ( pd + 2 ) % 4
         nx,ny = px + dxs[pd], py + dys[pd]
     
     # 이전 자리 비우기
     playerMap[px][py] = []
-    
+
     # 옮긴 자리에 사람이 없다면 총 들기
     if playerMap[nx][ny] == [] : # 다른 플레이어가 없다면
         npos = (nx,ny)
@@ -87,7 +87,7 @@ def moveOnePlayer(pIdx):
 
     else : # 다른 플레이어가 있다면
         
-        nidx,nd,ns,ngun = playerMap[nx][ny][0]
+        nidx,nd,ns,ngun = playerMap[nx][ny][0] # 간 자리에 있는 player
         curPlayerSpec, nextPlayerSpec = (ps+pgun,ps,pidx,pd,pgun), (ns+ngun,ns,nidx,nd,ngun)
         winnerPlayerSpec,loserPlayerSpec = max(curPlayerSpec,nextPlayerSpec), min(curPlayerSpec,nextPlayerSpec)
         # 승자,패자 정보
@@ -97,27 +97,40 @@ def moveOnePlayer(pIdx):
         playerScore[winnerPidx] += abs(winnerPlayerSpec[0] - loserPlayerSpec[0]) # 능력치 + 총의 공격력 차이
         # 패자 행동
         # 1. 총 내려놓기
-        gunMap[nx][ny].append(loserGun)
-
+        if loserGun:
+            gunMap[nx][ny].append(loserGun)
+        
         for i in range(4):
             nnd = (loserDir + i) % 4
             nnx,nny = nx + dxs[nnd], ny + dys[nnd]
             if inRange(nnx,nny) and playerMap[nnx][nny] == []:
                 nnpos = nnx,nny
-                getGun(nnpos,loserPidx,loserDir,loserStat,0)
+                getGun(nnpos,loserPidx,nnd,loserStat,0)
                 playerPos[loserPidx] = nnpos
                 break
 
         # 승자 행동
         # 1. 가장 좋은 총 들고, 나머지 총 내려놓기
         winnerPos = (nx,ny)
+        playerMap[nx][ny] = []
         getGun(winnerPos,winnerPidx,winnerDir,winnerStat,winnerGun)
         playerPos[winnerPidx] = winnerPos
 
+def printArr(arr):
+
+    for row in arr:
+        print(*row)
+    print()
+
 def simulate():
-    for _ in range(K):
+    for i in range(K):
+        
+        # print("Turn",i+1)
         for pIdx in range(1,M+1):
             moveOnePlayer(pIdx)
-    print(*list(playerScore.values()))
+        # printArr(playerMap)
+        # printArr(gunMap)
+        # print(playerPos)
+        print(*list(playerScore.values()))
 
 simulate()
