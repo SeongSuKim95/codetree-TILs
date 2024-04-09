@@ -1,4 +1,5 @@
-from collections import deque
+from collections import deque, defaultdict
+
 
 N = int(input())
 
@@ -34,9 +35,7 @@ def getScore():
         for _ in range(N)
     ]
     
-    colordict = {
-        i : [] for i in range(1,11)
-    }
+    colordict = defaultdict(list)
     
     color = 0
     for i in range(N):
@@ -131,6 +130,7 @@ def rotate():
     cornerRotate()
 
 answer = getScore()
+
 for _ in range(3):
     rotate()
     answer += getScore()
