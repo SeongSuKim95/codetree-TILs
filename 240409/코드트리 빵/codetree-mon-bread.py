@@ -1,179 +1,140 @@
-import sys
 from collections import deque
 
-INT_MAX = sys.maxsize
-EMPTY = (-1, -1)
+n,m = list(map(int,input().split()))
 
-# 변수 선언 및 입력:
-n, m = tuple(map(int, input().split()))
+def print_array(array):
 
-# 0이면 빈 칸, 1이면 베이스 캠프, 2라면 아무도 갈 수 없는 곳을 뜻합니다.
+    for row in array:
+        print(*row)
+    print()
+
+EMPTY = 0
+BASECAMP = 100
+
 grid = [
-    list(map(int, input().split()))
+    list(map(int,input().split()))
     for _ in range(n)
 ]
 
-# 편의점 목록을 관리합니다.
-cvs_list = []
-for _ in range(m):
-    x, y = tuple(map(int, input().split()))
-    cvs_list.append((x - 1, y - 1))
+for i in range(n):
+    for j in range(n):
+        if grid[i][j] == 1 :
+            grid[i][j] = BASECAMP
 
-# 현재 사람들의 위치를 관리합니다.
-# 초기 사람들은 격자 밖에 있으므로
-# 위치를 EMPTY 상태로 놓습니다.
-people = [EMPTY] * m
+store_pos = {i:(0,0) for i in range(1,m+1)}
+person_pos = {i:(-1,-1) for i in range(1,m+1)}
 
-# 현재 시간을 기록합니다.
-curr_t = 0
+pre_visited = [[False for _ in range(n)] for _ in range(n)]
+moving = []
 
-# dx, dy값을 
-# 문제에서의 우선순위인 상좌우하 순으로 적어줍니다.
-dxs = [-1,  0, 0, 1]
-dys = [ 0, -1, 1, 0]
+for pnum in range(1,m+1):
+    x,y = list(map(lambda x : int(x)-1,input().split()))
+    grid[x][y] = pnum
+    store_pos[pnum] = (x,y)
 
-# bfs에 사용되는 변수들입니다.
-# 최단거리 결과 기록
-step = [
-    [0] * n
-    for _ in range(n)
-]
-# 방문 여부 표시
-visited = [
-    [False] * n
-    for _ in range(n)
-] 
+def in_range(x,y):
 
+    return 0<=x<n and 0<=y<n
 
-# (x, y)가 격자 내에 있는 좌표인지를 판단합니다.
-def in_range(x, y):
-    return 0 <= x and x < n and 0 <= y and y < n
+def can_go(x,y):
 
+    return not pre_visited[x][y] 
 
-# (x, y)로 이동이 가능한지 판단합니다.
-def can_go(x, y):
-    # 범위를 벗어나지 않으면서, 방문했던 적이 없으면서, 이동 가능한 곳이어야 합니다.
-    return in_range(x, y) and not visited[x][y] and grid[x][y] != 2
+def find_base(x,y):
 
-
-# start_pos를 시작으로 하는 BFS를 진행합니다.
-# 시작점으로부터의 최단거리 결과는 step배열에 기록됩니다.
-def bfs(start_pos):
-    # visited, step 값을 전부 초기화합니다.
-    for i in range(n):
-        for j in range(n):
-            visited[i][j] = False
-            step[i][j] = 0
+    dxs,dys = [-1,1,0,0],[0,0,-1,1]
+    sx,sy = x,y 
+    cur_visited = [row[:] for row in pre_visited]
     
-    # 초기 위치를 넣어줍니다.
     q = deque()
-    q.append(start_pos)
-    sx, sy = start_pos
-    visited[sx][sy] = True
-    step[sx][sy] = 0
+    cur_visited[sx][sy] = True
 
-    # BFS를 진행합니다.
-    while q:
-        # 가장 앞에 원소를 골라줍니다.
-        x, y = q.popleft()
+    dist = [
+        [0 for _ in range(n)]
+        for _ in range(n)
+    ]
 
-        # 인접한 칸을 보며 아직 방문하지 않은 칸을 큐에 넣어줍니다.
-        for dx, dy in zip(dxs, dys):
-            nx, ny = x + dx, y + dy
-            # 갈 수 있는 경우에만 진행합니다.
-            if can_go(nx, ny):
-                visited[nx][ny] = True
-                step[nx][ny] = step[x][y] + 1
-                q.append((nx, ny))
-
-
-# 시뮬레이션을 진행합니다.
-def simulate():
-    # Step 1. 격자에 있는 사람들에 한하여 편의점 방향을 향해 1칸 움직입니다.
-    for i in range(m):
-        # 아직 격자 밖에 있는 사람이거나 이미 편의점에 도착한 사람이라면 패스합니다.
-        if people[i] == EMPTY or people[i] == cvs_list[i]:
-            continue
+    q.append((sx,sy))
+    bases = []
+    while q :
+        cx,cy = q.popleft()
+        for dx,dy in zip(dxs,dys):
+            nx, ny = cx + dx, cy + dy
+            if in_range(nx,ny) and not cur_visited[nx][ny] :
+                cur_visited[nx][ny] = True
+                dist[nx][ny] = dist[cx][cy] + 1
+                q.append((nx,ny))
+                if grid[nx][ny] == BASECAMP and not pre_visited[nx][ny]:
+                    bases.append((dist[nx][ny],nx,ny))
+    bases.sort()
+    cur_dist,base_x,base_y = bases[0]
+    # 들어간 거 표시
+    pre_visited[base_x][base_y] = True
         
-        # 원래는 현재 위치에서 편의점 위치까지의 최단거리를 구해줘야 합니다.
-        # 다만 최단거리가 되기 위한 그 다음 위치를 구하기 위해서는
-        # 거꾸로 편의점 위치를 시작으로 현재 위치까지 오는 최단거리를 구해주는 것이 필요합니다.
-        # 따라서 편의점 위치를 시작으로 하는 BFS를 진행합니다.
-        bfs(cvs_list[i])
-
-        px, py = people[i]
-        # 현재 위치에서 상좌우하 중 최단거리 값이 가장 작은 곳을 고르면
-        # 그 곳으로 이동하는 것이 최단거리 대로 이동하는 것이 됩니다.
-        # 그러한 위치 중 상좌우하 우선순위대로 가장 적절한 곳을 골라줍니다.
-        min_dist = INT_MAX
-        min_x, min_y = -1, -1
-        for dx, dy in zip(dxs, dys):
-            nx, ny = px + dx, py + dy
-            if in_range(nx, ny) and visited[nx][ny] and min_dist > step[nx][ny]:
-                min_dist = step[nx][ny]
-                min_x, min_y = nx, ny
-
-        # 우선순위가 가장 높은 위치로 한 칸 움직여줍니다.
-        people[i] = (min_x, min_y)
-
-    # Step 2. 편의점에 도착한 사람에 한하여 
-    #         앞으로 이동 불가능하다는 표시로 
-    #         grid값을 2로 바꿔줍니다.
-    for i in range(m):
-        if people[i] == cvs_list[i]:
-            px, py = people[i]
-            grid[px][py] = 2
-
-    # Step 3. 현재 시간 curr_t에 대해 curr_t ≤ m를 만족한다면
-    #         t번 사람이 베이스 캠프로 이동합니다.
-
-    # curr_t가 m보다 크다면 패스합니다.
-    if curr_t > m:
-        return
-    
-    # Step 3-1. 편의점으로부터 가장 가까운 베이스 캠프를 고르기 위해
-    #           편의점을 시작으로 하는 BFS를 진행합니다.
-    bfs(cvs_list[curr_t - 1])
-
-    # Step 3-2. 편의점에서 가장 가까운 베이스 캠프를 선택합니다.
-    #           i, j가 증가하는 순으로 돌리기 때문에
-    #           가장 가까운 베이스 캠프가 여러 가지여도
-    #           알아서 (행, 열) 우선순위대로 골라집니다.
-    min_dist = INT_MAX
-    min_x, min_y = -1, -1
-    for i in range(n):
-        for j in range(n):
-            # 방문 가능한 베이스 캠프 중
-            # 거리가 가장 가까운 위치를 찾아줍니다.
-            if visited[i][j] and grid[i][j] == 1 and min_dist > step[i][j]:
-                min_dist = step[i][j]
-                min_x, min_y = i, j
-    
-    # 우선순위가 가장 높은 베이스 캠프로 이동합니다.
-    people[curr_t - 1] = (min_x, min_y)
-    # 해당 베이스 캠프는 앞으로 이동이 불가능한 칸임을 표시합니다.
-    grid[min_x][min_y] = 2
+    return base_x,base_y
 
 
-# 전부 편의점에 도착헀는지를 확인합니다.
-def end():
-    # 단 한 사람이라도
-    # 편의점에 도착하지 못했다면
-    # 아직 끝나지 않은 것입니다.
-    for i in range(m):
-        if people[i] != cvs_list[i]:
-            return False
+def move(): # 각자 최단거리로 이동하는데, 상좌우하의 우선순위로 이동
+    global moving
+    move_dir = [(-1,0),(0,-1),(0,1),(1,0)]
+    next_moving = moving[:]
+    for cur_p in moving :
+        px,py = person_pos[cur_p]
+        p_temp = [row[:] for row in pre_visited]
+        q = deque()
+        p_temp[px][py] = True
+        p_dist = [
+            [0 for _ in range(n)]
+            for _ in range(n)
+        ] 
+        q.append((px,py,""))
 
-    # 전부 편의점에 도착했다면 끝입니다.
-    return True
+        dest_x,dest_y = store_pos[cur_p]
+        routes = None
+        while q : 
 
+            cur_x,cur_y,cur_r = q.popleft()
+            for idx,d in enumerate(move_dir) :
+                dx,dy = d
+                nx,ny = cur_x + dx, cur_y + dy
+                if in_range(nx,ny) and not p_temp[nx][ny]:
+                    p_dist[nx][ny] = p_dist[cur_x][cur_y] + 1
+                    p_temp[nx][ny] = True
+                    if (nx,ny) == (dest_x,dest_y):
+                        routes = cur_r+str(idx)
+                        break
+                    else:
+                        p_temp[nx][ny] = True
+                        q.append((nx,ny,cur_r + str(idx)))
+        min_route = routes
+        # 도착
+        if len(min_route) == 1 :
+            pre_visited[dest_x][dest_y] = True
+            person_pos[cur_p] = (dest_x,dest_y)
+            next_moving.remove(cur_p)
+        else :
+            next_dir = int(min_route[0])
+            dx,dy = move_dir[next_dir]
+            next_x,next_y = px+dx,py+dy
+            person_pos[cur_p] = (next_x,next_y)
+        moving = next_moving[:]
 
-# 1분에 한번씩 시뮬레이션을 진행합니다.
-while True:
-    curr_t += 1
-    simulate()
-    # 전부 이동이 끝났다면 종료합니다.
-    if end(): 
-        break
+def simulate():
+    global moving
+    t = 0
+    while True :
+        t += 1
+        if t <= m :
+            sx,sy = store_pos[t] # t번 사람이 가고 싶은 store
+            tx,ty = find_base(sx,sy) # t번 사람이 들어가는 베이스 캠프
+            person_pos[t] = (tx,ty)
+            move()
+            moving.append(t)
+        else :
+            if moving :
+                move()
+            else:
+                break
+    print(t-1)
 
-print(curr_t)
+simulate()
