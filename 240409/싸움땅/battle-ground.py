@@ -131,6 +131,6 @@ def simulate():
         # printArr(playerMap)
         # printArr(gunMap)
         # print(playerPos)
-        print(*list(playerScore.values()))
+    print(*list(playerScore.values()))
 
 simulate()
