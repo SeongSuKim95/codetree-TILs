@@ -165,6 +165,15 @@ def getStrongestTurret():
         for j in range(M):
             maxTurret = max(maxTurret,grid[i][j])
     return maxTurret
+
+def checkRemainTurrets():
+    cnt = 0
+    for i in range(N):
+        for j in range(M):
+            if grid[i][j] != DESTROYED:
+                cnt += 1
+    return cnt
+
 def simulate():
 
     for turn in range(1,K+1):
@@ -172,6 +181,10 @@ def simulate():
         ax,ay = attacker
         lastActivated[ax][ay] = turn
         attack(attacker,target)
-    print(getStrongestTurret())
 
-simulate()
+        if checkRemainTurrets() == 1 :
+            return getStrongestTurret()
+
+    return getStrongestTurret()
+
+print(simulate())
