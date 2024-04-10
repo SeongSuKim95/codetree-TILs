@@ -94,19 +94,19 @@ def moveRunners():
                     for cd in curRunners:
                         nx, ny = cx + dxs[cd], cy + dys[cd]
                         if inRange(nx,ny):
-                            # 가는 곳에 술래가 없으면
+                            # 가는 곳이 격자 내이고 술래가 없으면
                             if (nx,ny) != (chx,chy):
                                 nextRunnerMap[nx][ny].append(cd)
                             else: # 있으면
                                 nextRunnerMap[cx][cy].append(cd)
                         else:
-                            cd = (cd + 2) % 4
-                            nx,ny = cx + dxs[cd], cy + dys[cd]
+                            ncd = (cd + 2) % 4
+                            nx,ny = cx + dxs[ncd], cy + dys[ncd]
                             # 가는 곳에 술래가 없으면
                             if (nx,ny) != (chx,chy):
-                                nextRunnerMap[nx][ny].append(cd)
+                                nextRunnerMap[nx][ny].append(ncd)
                             else: # 있으면
-                                nextRunnerMap[cx][cy].append(cd)
+                                nextRunnerMap[cx][cy].append(ncd)
                 else:
                     for cd in curRunners:
                         nextRunnerMap[cx][cy].append(cd)
@@ -126,13 +126,13 @@ def moveChaser():
 def catchRunners():
     global chaserScore
     dx,dy = dxs[chDir],dys[chDir]
-    tx,ty = chx,chy    
-    while True :
-        tx,ty = tx + dx, ty+dy
-        if inRange(tx,ty):
-            if runnerMap[tx][ty] and treeMap[tx][ty] != TREE:
-                chaserScore += turn * len(runnerMap[tx][ty])
-                runnerMap[tx][ty] = []
+    tx,ty = chx,chy 
+    for i in range(3):
+        ntx,nty = tx + i * dx, ty +i * dy
+        if inRange(ntx,nty):
+            if runnerMap[ntx][nty] and treeMap[ntx][nty] != TREE:
+                chaserScore += turn * len(runnerMap[ntx][nty])
+                runnerMap[ntx][nty] = []
         else:
             break
 
