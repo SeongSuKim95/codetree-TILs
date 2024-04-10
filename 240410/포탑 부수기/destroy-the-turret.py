@@ -52,7 +52,7 @@ def chooseTarget(attacker):
                 turretList.append((grid[i][j],-lastActivated[i][j],-(i+j),-j,-i))
     _,_,_,ty,tx = max(turretList)
     return (-tx,-ty)
-    
+
 def chooseAttacker():
 
     turretList = []
@@ -166,11 +166,16 @@ def attack(attacker,target):
     if findRoute(attacker,target):
         LaserAttack(attacker,target)
         destroyTurrets()
+        if checkRemainTurrets() == 1 :
+            return False
         healTurrets()
     else :
         bombAttack(attacker,target)
         destroyTurrets()
+        if checkRemainTurrets() == 1 :
+            return False
         healTurrets()
+    return True
 
 def getStrongestTurret():
 
@@ -195,9 +200,7 @@ def simulate():
         target = chooseTarget(attacker)
         ax,ay = attacker
         lastActivated[ax][ay] = turn
-        attack(attacker,target)
-
-        if checkRemainTurrets() == 1 :
+        if not attack(attacker,target):
             return getStrongestTurret()
 
     return getStrongestTurret()
