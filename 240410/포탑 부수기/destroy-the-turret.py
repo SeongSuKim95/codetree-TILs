@@ -37,7 +37,23 @@ def printArr(arr):
     for row in arr:
         print(*row)
     print()
-def chooseTurrets():
+
+def chooseTarget(attacker):
+    ax,ay = attacker
+    turretList = []
+    for i in range(N):
+        for j in range(M):
+            if grid[i][j] != DESTROYED and (i,j) != (ax,ay):
+                # (공격력, 최근 공격 turn, 행과 열의 합, 열)
+                # 공격력 낮을 수록
+                # 최근 공격 turn이 클수록
+                # 행과 열의 합이 클수록
+                # 열의 크기가 클수록
+                turretList.append((grid[i][j],-lastActivated[i][j],-(i+j),-j,-i))
+    _,_,_,ty,tx = max(turretList)
+    return (-tx,-ty)
+    
+def chooseAttacker():
 
     turretList = []
     for i in range(N):
@@ -50,8 +66,8 @@ def chooseTurrets():
                 # 열의 크기가 클수록
                 turretList.append((grid[i][j],-lastActivated[i][j],-(i+j),-j,-i))
     _,_,_,ay,ax = min(turretList)
-    _,_,_,ty,tx = max(turretList)
-    return (-ax,-ay), (-tx,-ty)
+    grid[-ax][-ay] += N + M
+    return (-ax,-ay)
 
 def findRoute(attacker,target): # 경로가 있으면 경로를 반환, 없으면 false 반환
     # 이동 우선 순위
@@ -76,7 +92,7 @@ def findRoute(attacker,target): # 경로가 있으면 경로를 반환, 없으�
         for idx,(dx, dy) in enumerate(zip(dxs,dys)):
             nx, ny = (cx + dx + N) % N, (cy + dy + M ) % M
             if grid[nx][ny] != DESTROYED and visited[nx][ny] == 0:
-                visited[nx][ny] = visited[cx][cy] + 1
+                visited[nx][ny] = 1
                 q.append((nx, ny))
                 back_x[nx][ny] = cx
                 back_y[nx][ny] = cy
@@ -108,7 +124,6 @@ def LaserAttack(attacker,target):
     # 공격 포탑 정보
     ax,ay = attacker
     usedTurrets[ax][ay] = True
-    grid[ax][ay] += N + M
     damage = grid[ax][ay]
     # target 포탑 정보
     tx,ty = target
@@ -132,7 +147,6 @@ def bombAttack(attacker,target):
     # 공격 포탑 정보
     ax,ay = attacker
     usedTurrets[ax][ay] = True
-    grid[ax][ay] += N + M
     damage = grid[ax][ay]
     # target 포탑 정보
     tx,ty = target
@@ -177,7 +191,8 @@ def checkRemainTurrets():
 def simulate():
 
     for turn in range(1,K+1):
-        attacker, target = chooseTurrets()
+        attacker = chooseAttacker()
+        target = chooseTarget(attacker)
         ax,ay = attacker
         lastActivated[ax][ay] = turn
         attack(attacker,target)
