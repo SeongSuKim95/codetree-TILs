@@ -101,6 +101,7 @@ def moveRunners():
                                 nextRunnerMap[cx][cy].append(cd)
                         else:
                             cd = (cd + 2) % 4
+                            nx,ny = cx + dxs[cd], cy + dys[cd]
                             # 가는 곳에 술래가 없으면
                             if (nx,ny) != (chx,chy):
                                 nextRunnerMap[nx][ny].append(cd)
@@ -134,7 +135,6 @@ def catchRunners():
                 runnerMap[tx][ty] = []
         else:
             break
-
 
 for turn in range(1,K+1):
 
