@@ -1,3 +1,4 @@
+import sys
 from collections import defaultdict
 
 N, M = 0,0
@@ -62,7 +63,7 @@ def finish():
 
 def simulate():
     for _ in range(Q-1):
-        datas = list(map(int, input().split()))
+        datas = list(map(int, sys.stdin.readline().split()))
         code = datas[0]
 
         if code == 200 :
@@ -75,6 +76,6 @@ def simulate():
 
 Q = int(input())
 
-initData = list(map(int, input().split()))
+initData = list(map(int, sys.stdin.readline().split()))
 init(initData)
 print(simulate())
