@@ -104,7 +104,8 @@ def moveRunners():
                             nx,ny = cx + dxs[ncd], cy + dys[ncd]
                             # 가는 곳에 술래가 없으면
                             if (nx,ny) != (chx,chy):
-                                nextRunnerMap[nx][ny].append(ncd)
+                                if inRange(nx,ny):
+                                    nextRunnerMap[nx][ny].append(ncd)
                             else: # 있으면
                                 nextRunnerMap[cx][cy].append(ncd)
                 else:
