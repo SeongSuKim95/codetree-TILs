@@ -157,7 +157,7 @@ def bombAttack(attacker,target):
     dxs,dys = [-1,-1,-1,0,0,1,1,1],[-1,0,1,-1,1,-1,0,1]
     for dx,dy in zip(dxs,dys):
         nx,ny = (tx + dx + N) % N, (ty + dy + M) % M
-        if grid[nx][ny] != DESTROYED:
+        if grid[nx][ny] != DESTROYED and (nx,ny) != (ax,ay):
             grid[nx][ny] -= damage // 2
             usedTurrets[nx][ny] = True
 
