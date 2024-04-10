@@ -76,7 +76,7 @@ for hx,hy in trees:
 
 def inRange(x,y):
 
-    return 0<=x<N and 0<y<N
+    return 0<=x<N and 0<=y<N
 
 def moveRunners():
 
@@ -106,6 +106,8 @@ def moveRunners():
                             if (nx,ny) != (chx,chy):
                                 if inRange(nx,ny):
                                     nextRunnerMap[nx][ny].append(ncd)
+                                else:
+                                    print(nx,ny)
                             else: # 있으면
                                 nextRunnerMap[cx][cy].append(ncd)
                 else:
