@@ -67,28 +67,26 @@ def findTeam(hx,hy):
     ]
     dxs,dys = [-1,0,1,0],[0,1,0,-1]
     nhx,nhy = -1,-1
+    nbx,nby = -1,-1
     for dx,dy in zip(dxs,dys):
         nx,ny = hx+dx,hy+dy
         if inRange(nx,ny) and (grid[nx][ny] == TAIL or grid[nx][ny] == PATH):
             nhx,nhy = nx,ny
-            break
+        if inRange(nx,ny) and grid[nx][ny] == BODY:
+            nbx,nby = nx,ny
 
-    curTeam = [(nhx,nhy),(hx,hy)]
+    curTeam = [(nhx,nhy),(hx,hy),(nbx,nby)]
     visited[hx][hy] = 1
-    cx,cy = hx, hy
-
-    while True:
-
-        if grid[cx][cy] == TAIL:
-            break
-
+    q = deque([(nbx,nby)])
+    visited[nbx][nby] = 1
+    while q:
+        cx,cy = q.popleft()
         for dx,dy in zip(dxs,dys):
             nx,ny = cx+dx, cy+dy
-            if inRange(nx,ny) and not visited[nx][ny] and (grid[nx][ny] == BODY or grid[nx][ny] == TAIL):
+            if inRange(nx,ny) and not visited[nx][ny] and (grid[nx][ny] in BODIES):
                 curTeam.append((nx,ny))
+                q.append((nx,ny))
                 visited[nx][ny] = 1
-                cx,cy = nx,ny
-                break
 
     return curTeam
 
@@ -178,6 +176,7 @@ def throwBall(ballInfo):
             break
         ball_x, ball_y = ball_x + dx, ball_y + dy
 
+# printArr(grid)
 for round in range(K):
 
     curHeads = findHead()
@@ -187,9 +186,9 @@ for round in range(K):
     for hx,hy in curHeads:
         members = findTeam(hx,hy)
         teamList.append(members[:])
-    moveTeam(teamList) # grid update
-    throwBall(ballInfo)
 
+    moveTeam(teamList) # grid update
     # printArr(grid)
+    throwBall(ballInfo)
 
 print(SCORE)
