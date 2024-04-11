@@ -85,8 +85,6 @@ def moveMonsters():
         for j in range(4):
             if monsterMap[i][j] != []:
                 cx,cy = i,j
-                if (cx,cy) == (3,0):
-                    print('')
                 for md in monsterMap[i][j]:
                     Flag = False
                     for r in range(8): # 8방향 탐색
