@@ -157,13 +157,13 @@ def changeDir(bx,by):
                     visited[nx][ny] = 1
                     dist[nx][ny] = dist[cx][cy] + 1
                 elif grid[nx][ny] == HEAD :
-                    HEADFLAG = True
-                    head = (nx,ny)
-                    q.append((nx, ny))
-                    visited[nx][ny] = 1
-                    dist[nx][ny] = dist[cx][cy] + 1
-                    SCORE += dist[nx][ny] ** 2
-                    # print(dist[nx][ny]**2)
+                    if grid[cx][cy] != TAIL:
+                        HEADFLAG = True
+                        head = (nx,ny)
+                        visited[nx][ny] = 1
+                        dist[nx][ny] = dist[cx][cy] + 1
+                        SCORE += dist[nx][ny] ** 2
+                        # print(dist[nx][ny]**2)
                 else :
                     q.append((nx, ny))
                     visited[nx][ny] = 1
