@@ -32,10 +32,10 @@ def getStartPoints():
     return startPoints
 
 def printArr(arr):
+    print()
 
     for row in arr:
         print(*row)
-    print()
 
 def inRange(x,y):
 
@@ -142,6 +142,7 @@ def changeDir(bx,by):
     if grid[bx][by] == HEAD:
         HEADFLAG = True
         head = (bx, by)
+        # print(dist[bx][by]**2)
         SCORE += dist[bx][by] ** 2
 
     # 몸통 탐색
@@ -150,17 +151,23 @@ def changeDir(bx,by):
         for dx,dy in zip(dxs,dys):
             nx,ny = cx + dx, cy + dy
             if inRange(nx,ny) and not visited[nx][ny] and (grid[nx][ny] in BODIES):
-                q.append((nx,ny))
-                visited[nx][ny] = 1
-                dist[nx][ny] = dist[cx][cy] + 1
                 if grid[nx][ny] == TAIL :
                     TAILFLAG = True
                     tail = (nx,ny)
-                if grid[nx][ny] == HEAD :
+                    visited[nx][ny] = 1
+                    dist[nx][ny] = dist[cx][cy] + 1
+                elif grid[nx][ny] == HEAD :
                     HEADFLAG = True
                     head = (nx,ny)
+                    q.append((nx, ny))
+                    visited[nx][ny] = 1
+                    dist[nx][ny] = dist[cx][cy] + 1
                     SCORE += dist[nx][ny] ** 2
-
+                else :
+                    q.append((nx, ny))
+                    visited[nx][ny] = 1
+                    dist[nx][ny] = dist[cx][cy] + 1
+    # print(tail,head)
     grid[head[0]][head[1]], grid[tail[0]][tail[1]] = TAIL, HEAD
 
 def throwBall(ballInfo):
