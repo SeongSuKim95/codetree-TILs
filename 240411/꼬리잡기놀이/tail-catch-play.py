@@ -18,7 +18,7 @@ grid = [
 dirs = [(0,1),(-1,0),(0,-1),(1,0)]
 def getStartPoints():
 
-    startPoints = [(-1,-1,-1)]
+    startPoints = []
     # 0: 우, 1: 상, 2: 좌, 3: 하
     for i in range(N):
         startPoints.append((i,0,0))
@@ -27,7 +27,7 @@ def getStartPoints():
     for i in range(N-1,-1,-1):
         startPoints.append((i,N-1,2))
     for i in range(N-1,-1,-1):
-        startPoints.append((i,N-1,3))
+        startPoints.append((0,i,3))
 
     return startPoints
 
@@ -163,6 +163,7 @@ def changeDir(bx,by):
                     visited[nx][ny] = 1
                     dist[nx][ny] = dist[cx][cy] + 1
                     SCORE += dist[nx][ny] ** 2
+                    # print(dist[nx][ny]**2)
                 else :
                     q.append((nx, ny))
                     visited[nx][ny] = 1
@@ -184,11 +185,13 @@ def throwBall(ballInfo):
         ball_x, ball_y = ball_x + dx, ball_y + dy
 
 # printArr(grid)
-for round in range(1,K+1):
-
+round = 0
+for i in range(K):
+    # print(round)
     curHeads = findHead()
     ballInfo = startPoints[round % (4*N)]
-
+    # print(ballInfo)
+    round += 1
     teamList = []
     for hx,hy in curHeads:
         members = findTeam(hx,hy)
@@ -197,5 +200,6 @@ for round in range(1,K+1):
     moveTeam(teamList) # grid update
     # printArr(grid)
     throwBall(ballInfo)
+    # print()
 
 print(SCORE)
