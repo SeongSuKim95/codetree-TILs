@@ -18,7 +18,7 @@ grid = [
 dirs = [(0,1),(-1,0),(0,-1),(1,0)]
 def getStartPoints():
 
-    startPoints = []
+    startPoints = [(-1,-1,-1)]
     # 0: 우, 1: 상, 2: 좌, 3: 하
     for i in range(N):
         startPoints.append((i,0,0))
@@ -184,7 +184,7 @@ def throwBall(ballInfo):
         ball_x, ball_y = ball_x + dx, ball_y + dy
 
 # printArr(grid)
-for round in range(K):
+for round in range(1,K+1):
 
     curHeads = findHead()
     ballInfo = startPoints[round % (4*N)]
