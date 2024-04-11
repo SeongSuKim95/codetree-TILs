@@ -92,6 +92,7 @@ def explodeSameNums(numList):
         else :
             isExploded = True
             score += curNum * cnt
+
         if not isExploded :
             # 마지막에 센 숫자들 넣어줘야함
             return nextNumList
@@ -140,9 +141,12 @@ def getCurveNums():
     return numList
 
 def moveToGrid(newNumList):
-
+    nextGrid = [
+        [0] * N
+        for _ in range(N)
+    ]
     cx,cy,cd,nIdx = N//2, N//2, 3, 0 # 왼쪽 방향 + 1
-    grid[cx][cy] = 0
+
     # N - 1까지 두번씩 , + N-1 만큼 한번 더 추가 해야함
     for length in range(1,N):
 
@@ -150,13 +154,18 @@ def moveToGrid(newNumList):
             cd = (cd - 1 + 4) % 4 # 방향 바꾸기
             for j in range(length):
                 cx,cy = cx + dirs[cd][0], cy + dirs[cd][1]
-                grid[cx][cy] = newNumList[nIdx]
+                nextGrid[cx][cy] = newNumList[nIdx]
                 nIdx += 1
-
+    cd = (cd - 1 + 4) % 4
     for _ in range(N-1):
         cx, cy = cx + dirs[cd][0], cy + dirs[cd][1]
-        grid[cx][cy] = newNumList[nIdx]
+        nextGrid[cx][cy] = newNumList[nIdx]
         nIdx += 1
+
+    for i in range(N):
+        for j in range(N):
+            grid[i][j] = nextGrid[i][j]
+    return
 
 for cd,cp in attacks:
     attack(cd,cp)
