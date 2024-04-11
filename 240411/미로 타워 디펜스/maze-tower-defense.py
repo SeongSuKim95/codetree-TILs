@@ -85,9 +85,13 @@ def explodeSameNums(numList):
                     curNum = num
                     cnt = 1
                     cIdx = idx
-        for k in range(cnt-1,-1,-1):
-            nextNumList[nIdx] = curNumList[cIdx-k]
-            nIdx += 1
+        if cnt < 4 :
+            for k in range(cnt-1,-1,-1):
+                nextNumList[nIdx] = curNumList[cIdx-k]
+                nIdx += 1
+        else :
+            isExploded = True
+            score += curNum * cnt
         if not isExploded :
             # 마지막에 센 숫자들 넣어줘야함
             return nextNumList
