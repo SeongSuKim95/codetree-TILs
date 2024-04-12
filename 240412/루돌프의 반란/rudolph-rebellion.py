@@ -124,9 +124,14 @@ def chainCollsion(dir,sIdx,spos,epos): # 방향, 처음 산타 출발점
     # 이전 산타 원래 위치 정보 업데이트
     santaMap[cx][cy].remove(sIdx)
     # 산타 있는 상황임!!!!!
-    tIdx = santaMap[ex][ey].pop()
+    if (cx,cy) != (ex,ey):
+        tIdx = santaMap[ex][ey].pop()
+    else :
+        tIdx = sIdx
     santaMap[ex][ey].append(sIdx)
     santaInfo[sIdx] = (ex,ey,2) # 충돌 후 기절
+    if (cx,cy) == (ex,ey):
+        return
 
     while True :
         sIdx = tIdx
@@ -254,14 +259,15 @@ def simulate():
         # print(santaInfo)
         # print(santaScore)
         # print()
-    ans = []
-    for x,y in sorted(santaScore.items(),key=lambda x: x[0]):
-        ans.append(y)
-    print(*ans)
 
-# print("(Rx,Ry):", Rx, Ry)
-# printArr(santaMap)
-# print(santaInfo)
-# print(santaScore)
-# print()
+
+print("(Rx,Ry):", Rx, Ry)
+printArr(santaMap)
+print(santaInfo)
+print(santaScore)
+print()
 simulate()
+ans = []
+for x, y in sorted(santaScore.items(), key=lambda x: x[0]):
+    ans.append(y)
+print(*ans)
