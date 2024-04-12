@@ -1,6 +1,6 @@
 import sys
 from collections import defaultdict
-sys.stdin = open('input.txt','r')
+# sys.stdin = open('input.txt','r')
 
 # 3:30 까지
 
