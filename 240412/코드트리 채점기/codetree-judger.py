@@ -1,4 +1,3 @@
-from sortedcontainers import SortedSet, SortedDict
 import heapq
 import sys
 class PriorityQueue:
@@ -32,7 +31,7 @@ MAX_N = 50000
 INF = sys.maxsize
 
 # 해당 도메인에서 해당 문제ID가 레디큐에 있는지 관리해줍니다.
-is_in_readyq = [SortedSet() for _ in range(MAX_D + 1)]
+is_in_readyq = [set() for _ in range(MAX_D + 1)]
 
 # 현재 쉬고 있는 채점기들을 관리해줍니다.
 rest_judger = PriorityQueue()
@@ -47,11 +46,11 @@ e = [0 for _ in range(MAX_D + 1)]
 
 # 도메인을 관리하기 위해 cnt를 이용합니다.
 # 도메인 문자열을 int로 변환해주는 map을 관리합니다.
-domainToIdx = SortedDict()
+domainToIdx = dict()
 global cnt
 cnt = 0
 
-# 현재 채점 대기 큐에 있는 task의 개수를 관리합니다.
+# 현재 채점 대기 큐에 있는 tk의 개수를 관리합니다.
 global ans
 ans = 0
 
