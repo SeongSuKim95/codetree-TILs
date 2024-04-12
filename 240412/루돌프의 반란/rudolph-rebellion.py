@@ -1,8 +1,8 @@
 import sys
 from collections import defaultdict
-# sys.stdin = open('input.txt','r')
+sys.stdin = open('input.txt','r')
 
-# 5:20 까지
+# 3:30 까지
 
 # (5) 상호작용
 #
@@ -89,14 +89,13 @@ def moveRudolf():
     # 루돌프 위치 update
     sRx,sRy = Rx, Ry
     Rx, Ry = Rx + Rdx, Ry + Rdy
-
     # 루돌프가 산타와 ( 산타 기절, 산타 OUT 에 따른 산타 상태 update)
     if len(santaMap[Rx][Ry]) != 0: # 옮긴 루돌프의 위치에 산타가 있으면 충돌
         sIdx = santaMap[Rx][Ry][0]
+
         santaCollision(sIdx,(sRx,sRy),(Rx,Ry),(Rdx,Rdy))
 def santaCollision(sIdx,spos,epos,rdir):
     global Rx,Ry,C,D
-
     santaScore[sIdx] += C
     sx,sy = epos
     rdx,rdy = rdir
@@ -107,11 +106,11 @@ def santaCollision(sIdx,spos,epos,rdir):
         santaMap[sx][sy].remove(sIdx)
         santaInfo[sIdx] = (nsx,nsy,-1)
         return
-    # 2. 해당 자리에 다른 산타가 있는 경우
+    # 2. 튕겨나간 자리에 다른 산타가 있는 경우
     if len(santaMap[nsx][nsy]) != 0 : # 루돌프와 충돌한 산타는 기절, 옆에 있는 산타는 방향대로 1칸씩 연쇄적으로 밀려남
         chainCollsion((rdx,rdy),sIdx,(sx,sy),(nsx,nsy))
         return
-    # 3. 빈칸인 경우 스턴
+    # 3. 튕겨 나간 자리가 빈칸인 경우 스턴
     if len(santaMap[nsx][nsy]) == 0 :
         santaMap[sx][sy].remove(sIdx)
         santaMap[nsx][nsy].append(sIdx)
@@ -191,7 +190,6 @@ def moveOneSanta(sIdx):
     # 움직일 수 있는 칸이 있더라도 만약 루돌프로부터 가까워질 수 있는 방법이 없다면 산타는 움직이지 않습니다.
     # 산타는 상하좌우로 인접한 4방향 중 한 곳으로 움직일 수 있습니다. 이때 가장 가까워질 수 있는 방향이 여러 개라면, 상우하좌 우선순위에 맞춰 움직입니다.
     cx, cy, cStunTime = santaInfo[sIdx]
-
     if cStunTime > 0 or cStunTime == SANTA_OUT: # 기절 혹은 OUT
         return
     # 현재 루돌프와 산타간 거리
@@ -209,12 +207,13 @@ def moveOneSanta(sIdx):
             continue
         rudolfDists.append((getDist((Rx,Ry),(ncx,ncy)),dIdx))
     # 움직일 수 있는 방향이 없는 경우
+
     if len(rudolfDists) == 0:
         return
     # 루돌프와 가장 가까워 질때의 최소 거리, 방향 Idx
     minDist , minDirIdx = min(rudolfDists)
 
-    if minDist == currDist : # 더 가까워질 방법이 없는 경우
+    if minDist >= currDist : # 더 가까워질 방법이 없는 경우
         return
 
     # santa 정보 업데이트
@@ -225,7 +224,8 @@ def moveOneSanta(sIdx):
     else:
         santaMap[cx][cy].remove(sIdx) # 이전 산타 정보 지우기
         santaMap[nsx][nsy].append(sIdx) # 새로운 위치에 산타 정보 추가
-        santaInfo[sIdx] = (nsx,nsy,cStunTime) # TODO : cStunTume update
+        _,_,stunTime = santaInfo[sIdx]
+        santaInfo[sIdx] = (nsx,nsy,stunTime) # TODO : cStunTume update
 def turnAction():
 
     for sIdx, (sx,sy,stuntime) in santaInfo.items():
@@ -234,12 +234,34 @@ def turnAction():
         if stuntime > 0 :
             santaInfo[sIdx] = (sx,sy,stuntime-1) # stun 시간 1 줄이기
 
-for _ in range(M):
-    moveRudolf()
-    for i in range(1,P+1):
-        moveOneSanta(i)
-    turnAction()
-    # print(Rx,Ry)
-    # printArr(santaMap)
-    # print(santaInfo)
-print(*santaScore.values())
+def isSantaALive():
+    for sIdx,(sx,sy,stuntime) in santaInfo.items():
+        if stuntime != SANTA_OUT:
+            return True
+    return False
+
+
+def simulate():
+    for turn in range(M):
+        moveRudolf()
+        if not isSantaALive(): return
+        for i in range(1,P+1):
+            moveOneSanta(i)
+            if not isSantaALive(): return
+        turnAction()
+        # print("(Rx,Ry):",Rx,Ry)
+        # printArr(santaMap)
+        # print(santaInfo)
+        # print(santaScore)
+        # print()
+    ans = []
+    for x,y in sorted(santaScore.items(),key=lambda x: x[0]):
+        ans.append(y)
+    print(*ans)
+
+# print("(Rx,Ry):", Rx, Ry)
+# printArr(santaMap)
+# print(santaInfo)
+# print(santaScore)
+# print()
+simulate()
