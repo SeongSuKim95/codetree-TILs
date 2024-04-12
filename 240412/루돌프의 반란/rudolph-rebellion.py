@@ -261,11 +261,11 @@ def simulate():
         # print()
 
 
-print("(Rx,Ry):", Rx, Ry)
-printArr(santaMap)
-print(santaInfo)
-print(santaScore)
-print()
+# print("(Rx,Ry):", Rx, Ry)
+# printArr(santaMap)
+# print(santaInfo)
+# print(santaScore)
+# print()
 simulate()
 ans = []
 for x, y in sorted(santaScore.items(), key=lambda x: x[0]):
