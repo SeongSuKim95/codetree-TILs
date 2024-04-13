@@ -202,16 +202,17 @@ def dfs(cdir,cnt):
         return
 
     for d in range(4):
-        gridTemp = [
-            row[:] for row in grid
-        ]
-        tempRED_POS, tempBLUE_POS = RED_POS, BLUE_POS
-        tiltGrid(d)
-        dfs(d,cnt+1)
-        for i in range(N):
-            for j in range(M):
-                grid[i][j] = gridTemp[i][j]
-        RED_POS, BLUE_POS = tempRED_POS, tempBLUE_POS
+        if d != counterDir[d]:
+            gridTemp = [
+                row[:] for row in grid
+            ]
+            tempRED_POS, tempBLUE_POS = RED_POS, BLUE_POS
+            tiltGrid(d)
+            dfs(d,cnt+1)
+            for i in range(N):
+                for j in range(M):
+                    grid[i][j] = gridTemp[i][j]
+            RED_POS, BLUE_POS = tempRED_POS, tempBLUE_POS
 
 
 for k in range(4):
