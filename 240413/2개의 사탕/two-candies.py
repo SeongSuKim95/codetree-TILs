@@ -1,255 +1,67 @@
-import sys
-from collections import deque
-# sys.stdin = open('input.txt','r')
-N, M = list(map(int,sys.stdin.readline().split()))
-def convertStr(str):
+def move(i,j,dr):
+    back=-1
+    for cnt in range(1,10): # 최대로 뻗어가서 벽을 만날때까지 진행
+        ni,nj=i+di[dr]*cnt,j+dj[dr]*cnt
+        if arr[ni][nj]=='#':    return cnt+back
+        if arr[ni][nj]=='O':    return cnt
+        # 다른 공을 지나간경우 벽을 만났다면 한칸 뒤로
+        if arr[ni][nj]=='B' or arr[ni][nj]=='R': back-=1
 
-    if str == "#":
-        return WALL
-    if str == ".":
-        return EMPTY
-    if str == "R":
-        return RED
-    if str == "B":
-        return BLUE
-    if str == "O":
-        return EXIT
+def dfs(n,ri,rj,bi,bj):
+    global ans
+    if (n,ri,rj,bi,bj) in v_set:    # 이미 이 시도회수에 이 좌표조합을 해 봤음!! => 가지치기!
+        return
+    v_set.add((n,ri,rj,bi,bj))      # 이후 중복체크 방지를 위해서 방문표시!
+    # if ans<=n:                      # 가지치기
+    #     return
 
-def printArr(arr):
+    if n>10:    # 종료조건: 10회 이하까지만 진행
+        return
 
-    for row in arr:
-        print(*row)
-    print()
-
-# 상 하 좌 우
-dxs, dys = [-1,1,0,0],[0,0,-1,1]
-
-WALL = 1
-EMPTY = 0
-RED = "R"
-BLUE = "B"
-EXIT = "X"
-
-CANDY_OUT = (100,100)
-RED_POS = (0,0)
-BLUE_POS = (0,0)
-
-grid = [
-    list(map(lambda x : convertStr(x),sys.stdin.readline().rstrip('\n')))
-    for _ in range(N)
-]
-
-for i in range(N):
-    for j in range(M):
-        if grid[i][j] == RED:
-            RED_POS = (i,j)
-        if grid[i][j] == BLUE :
-            BLUE_POS = (i,j)
-
-def inRange(x,y):
-    return 0<=x<N and 0<=y<M
-def moveOne(dir,cx,cy):
-    global RED_POS, BLUE_POS
-    red_pos = RED_POS
-    blue_pos = BLUE_POS
-    ox,oy = cx,cy
-    dx,dy = dxs[dir],dys[dir]
-    while True :
-        nx,ny = cx+dx,cy+dy
-
-        if grid[nx][ny] != EMPTY and grid[nx][ny] != EXIT:
-            break # (cx,cy)가 바뀐 자리임!
-
-        if grid[nx][ny] == EMPTY:
-            cx,cy = nx,ny
+    for dr in range(4):             # 4방향 구슬들 이동
+        # [1] 각 공의 이동거리 계산
+        r_cnt = move(ri,rj,dr)      # 해당방향으로 이동거리
+        b_cnt = move(bi,bj,dr)
+        if r_cnt==0 and b_cnt==0:   # 이 방향으로는 탐색 필요없음
             continue
 
-        if grid[nx][ny] == EXIT:
-            cx,cy = nx,ny
-            break
+        # [2] 각공의 이동 반영
+        nri,nrj=ri+di[dr]*r_cnt,rj+dj[dr]*r_cnt # 이동반영
+        nbi,nbj=bi+di[dr]*b_cnt,bj+dj[dr]*b_cnt
 
-    # 빨간 공인 경우
-    if grid[ox][oy] == RED:
-        # 기존 위치
-        grid[ox][oy] = EMPTY
-
-        # 바뀐 위치
-        if grid[cx][cy] != EXIT:
-            grid[cx][cy] = RED
-            RED_POS = (cx,cy)
+        # [3] 이동한 위치가 홀인 경우 처리(성공/실패)
+        if arr[nbi][nbj]=='O':      # 파란색공=>홀: 실패 => 다음 방향으로..
+            continue
         else:
-            RED_POS = CANDY_OUT
+            if arr[nri][nrj]=='O':  # 빨간색 공만 홀: 성공
+                ans=min(ans, n)
+                return
 
-    # 빨간 공인 경우
-    if grid[ox][oy] == BLUE:
-        # 기존 위치
-        grid[ox][oy] = EMPTY
+        # [4] 둘 다 홀이 아닌경우 (next 좌표 기준으로 다음 시도)
+        # 현재위치를 빈칸, 이동할 위치에 'R','B" 구슬표시
+        arr[ri][rj],arr[bi][bj]='.','.'
+        arr[nri][nrj],arr[nbi][nbj]='R','B'
 
-        # 바뀐 위치
-        if grid[cx][cy] != EXIT:
-            grid[cx][cy] = BLUE
-            BLUE_POS = (cx, cy)
-        else:
-            BLUE_POS = CANDY_OUT
+        dfs(n+1,nri,nrj,nbi,nbj)
 
-def moveRedFirst(dir,red_pos,blue_pos):
-    Rx,Ry = red_pos
-    Bx,By = blue_pos
-    moveOne(dir,Rx,Ry)
-    moveOne(dir,Bx,By)
-    return
+        arr[nri][nrj],arr[nbi][nbj]='.','.'
+        arr[ri][rj],arr[bi][bj]='R','B'     # 반드시 원상복구!
 
-counterDir = {
-    0 : 1,
-    1 : 0,
-    2 : 3,
-    3 : 2
-}
+di = [-1, 1, 0, 0]
+dj = [ 0, 0,-1, 1]
+# 지도입력 및 빨간색(ri,rj), 파란색(bi,bj) 초기좌표
+N, M = map(int, input().split())
+arr = [list(input()) for _ in range(N)]
+for i in range(N) :
+    for j in range(M) :
+        if arr[i][j] == 'R' :
+            ri, rj = i, j
+        if arr[i][j] == 'B' :
+            bi, bj = i, j
 
-def moveBlueFirst(dir,red_pos,blue_pos):
-
-    Rx,Ry = red_pos
-    Bx,By = blue_pos
-    moveOne(dir,Bx,By)
-    if BLUE_POS == CANDY_OUT:
-            return
-    moveOne(dir,Rx,Ry)
-    return
-
-def checkUpward(dir):
-    global RED_POS, BLUE_POS
-    red_pos = RED_POS
-    blue_pos = BLUE_POS
-    if red_pos[1] == blue_pos[1] : # RED 와 BLUE가 같은 열에 있는지 확인
-        if red_pos[0] < blue_pos[0]: # 행이 작은 쪽(RED) 먼저 이동
-            moveRedFirst(dir,red_pos,blue_pos)
-        if blue_pos[0] < red_pos[0]: # 행이 작은 쪽(BLUE) 먼저 이동
-            moveBlueFirst(dir,red_pos,blue_pos)
-    else:
-        moveRedFirst(dir,red_pos,blue_pos)
-def checkDownward(dir):
-    global RED_POS, BLUE_POS
-    red_pos = RED_POS
-    blue_pos = BLUE_POS
-    if red_pos[1] == blue_pos[1] : # RED 와 BLUE가 같은 열에 있는지 확인
-        if red_pos[0] < blue_pos[0]: # 행이 큰 쪽(BLUE) 먼저 이동
-            moveBlueFirst(dir,red_pos,blue_pos)
-        if blue_pos[0] < red_pos[0]: # 행이 큰 쪽(RED) 먼저 이동
-            moveRedFirst(dir,red_pos,blue_pos)
-    else:
-        moveRedFirst(dir,red_pos,blue_pos)
-
-def checkLeftward(dir):
-    global RED_POS, BLUE_POS
-    red_pos = RED_POS
-    blue_pos = BLUE_POS
-    if red_pos[0] == blue_pos[0] : # RED 와 BLUE가 같은 행에 있는지 확인
-        if red_pos[1] < blue_pos[1]: # 열이 작은 쪽(RED) 먼저 이동
-            moveRedFirst(dir,red_pos,blue_pos)
-        if blue_pos[1] < red_pos[1]: # 열이 작은 쪽(BLUE) 먼저 이동
-            moveBlueFirst(dir,red_pos,blue_pos)
-    else:
-        moveRedFirst(dir,red_pos,blue_pos)
-def checkRightward(dir):
-    global RED_POS, BLUE_POS
-    red_pos = RED_POS
-    blue_pos = BLUE_POS
-    if red_pos[0] == blue_pos[0] : # RED 와 BLUE가 같은 행에 있는지 확인
-        if red_pos[1] < blue_pos[1]: # 열이 큰 쪽(BLUE) 먼저 이동
-            moveBlueFirst(dir,red_pos,blue_pos)
-        if blue_pos[1] < red_pos[1]: # 열이 큰 쪽(RED) 먼저 이동
-            moveRedFirst(dir,red_pos,blue_pos)
-    else:
-        moveRedFirst(dir,red_pos,blue_pos)
-def tiltGrid(dir):
-
-    if dir == 0: # 위방향
-        checkUpward(dir)
-        return
-
-    if dir == 1: # 아래방향
-        checkDownward(dir)
-        return
-
-    if dir == 2: # 좌측방향
-        checkLeftward(dir)
-        return
-
-    if dir == 3: # 우측방향
-        checkRightward(dir)
-        return
-
-def isValidTilt(): # Valid한지만 판단
-    global RED_POS, BLUE_POS
-    return BLUE_POS != CANDY_OUT
-
-def isREDout():
-    global RED_POS
-    return RED_POS == CANDY_OUT
-
-answer = 1e9
-def dfs(cdir,cnt):
-
-    global RED_POS, BLUE_POS, answer
-
-    if not isValidTilt():
-        return
-
-    if isREDout():
-        answer = min(answer,cnt)
-        return
-
-    if cnt > 10 :
-        return
-
-    for d in range(4):
-        if d != counterDir[d]:
-            tempRED_POS, tempBLUE_POS = RED_POS, BLUE_POS
-            tiltGrid(d)
-            dfs(d,cnt+1)
-            if RED_POS == CANDY_OUT and BLUE_POS != CANDY_OUT:
-                grid[BLUE_POS[0]][BLUE_POS[1]] = EMPTY
-            if BLUE_POS == CANDY_OUT and RED_POS != CANDY_OUT:
-                grid[RED_POS[0]][RED_POS[1]] = EMPTY
-            if BLUE_POS != CANDY_OUT and RED_POS != CANDY_OUT:
-                grid[RED_POS[0]][RED_POS[1]] = EMPTY
-                grid[BLUE_POS[0]][BLUE_POS[1]] = EMPTY
-            grid[tempRED_POS[0]][tempRED_POS[1]] = RED
-            grid[tempBLUE_POS[0]][tempBLUE_POS[1]] = BLUE
-            RED_POS, BLUE_POS = tempRED_POS, tempBLUE_POS
-
-
-for k in range(4):
-    gridTemp = [
-        row[:] for row in grid
-    ]
-    tempRED_POS, tempBLUE_POS = RED_POS, BLUE_POS
-
-    tiltGrid(k)
-    dfs(k,1)
-
-    for i in range(N):
-        for j in range(M):
-            grid[i][j] = gridTemp[i][j]
-    RED_POS, BLUE_POS = tempRED_POS, tempBLUE_POS
-
-if answer == 1e9:
-    print(-1)
-else:
-    print(answer)
-# for d in range(4):
-#     print("curDir:",d)
-#     gridTemp = [
-#             row[:] for row in grid
-#         ]
-#     tempRED_POS, tempBLUE_POS = RED_POS, BLUE_POS
-#     printArr(grid)
-#
-#     tiltGrid(d)
-#
-#     printArr(grid)
-#
-#     for i in range(N):
-#         for j in range(M):
-#             grid[i][j] = gridTemp[i][j]
-#     RED_POS, BLUE_POS = tempRED_POS, tempBLUE_POS
+v_set = set()   # 해당 시도회수때 R,B 구슬좌표가 같다면 => 이미해본 경우!
+ans = 11
+dfs(1,ri,rj,bi,bj)
+if ans==11:
+    ans=-1
+print(ans)
