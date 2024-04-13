@@ -182,7 +182,7 @@ def dfs(cdir,cnt):
 
     global RED_POS, BLUE_POS, answer
 
-    if cnt >= 10 :
+    if cnt > 10 :
         return
 
     if not isValidTilt():
