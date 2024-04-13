@@ -111,13 +111,15 @@ def moveBlueFirst(dir,red_pos,blue_pos):
     Rx,Ry = red_pos
     Bx,By = blue_pos
     moveOne(dir,Bx,By)
+    if BLUE_POS == CANDY_OUT:
+            return
     moveOne(dir,Rx,Ry)
     return
 
 def checkUpward(dir):
     global RED_POS, BLUE_POS
-    red_pos = RED_POS[:]
-    blue_pos = BLUE_POS[:]
+    red_pos = RED_POS
+    blue_pos = BLUE_POS
     if red_pos[1] == blue_pos[1] : # RED 와 BLUE가 같은 열에 있는지 확인
         if red_pos[0] < blue_pos[0]: # 행이 작은 쪽(RED) 먼저 이동
             moveRedFirst(dir,red_pos,blue_pos)
@@ -127,8 +129,8 @@ def checkUpward(dir):
         moveRedFirst(dir,red_pos,blue_pos)
 def checkDownward(dir):
     global RED_POS, BLUE_POS
-    red_pos = RED_POS[:]
-    blue_pos = BLUE_POS[:]
+    red_pos = RED_POS
+    blue_pos = BLUE_POS
     if red_pos[1] == blue_pos[1] : # RED 와 BLUE가 같은 열에 있는지 확인
         if red_pos[0] < blue_pos[0]: # 행이 큰 쪽(BLUE) 먼저 이동
             moveBlueFirst(dir,red_pos,blue_pos)
@@ -139,8 +141,8 @@ def checkDownward(dir):
 
 def checkLeftward(dir):
     global RED_POS, BLUE_POS
-    red_pos = RED_POS[:]
-    blue_pos = BLUE_POS[:]
+    red_pos = RED_POS
+    blue_pos = BLUE_POS
     if red_pos[0] == blue_pos[0] : # RED 와 BLUE가 같은 행에 있는지 확인
         if red_pos[1] < blue_pos[1]: # 열이 작은 쪽(RED) 먼저 이동
             moveRedFirst(dir,red_pos,blue_pos)
@@ -150,8 +152,8 @@ def checkLeftward(dir):
         moveRedFirst(dir,red_pos,blue_pos)
 def checkRightward(dir):
     global RED_POS, BLUE_POS
-    red_pos = RED_POS[:]
-    blue_pos = BLUE_POS[:]
+    red_pos = RED_POS
+    blue_pos = BLUE_POS
     if red_pos[0] == blue_pos[0] : # RED 와 BLUE가 같은 행에 있는지 확인
         if red_pos[1] < blue_pos[1]: # 열이 큰 쪽(BLUE) 먼저 이동
             moveBlueFirst(dir,red_pos,blue_pos)
@@ -194,7 +196,6 @@ def dfs(cdir,cnt):
         return
 
     if isREDout():
-        # printArr(grid)
         answer = min(answer,cnt)
         return
 
@@ -203,15 +204,18 @@ def dfs(cdir,cnt):
 
     for d in range(4):
         if d != counterDir[d]:
-            gridTemp = [
-                row[:] for row in grid
-            ]
             tempRED_POS, tempBLUE_POS = RED_POS, BLUE_POS
             tiltGrid(d)
             dfs(d,cnt+1)
-            for i in range(N):
-                for j in range(M):
-                    grid[i][j] = gridTemp[i][j]
+            if RED_POS == CANDY_OUT and BLUE_POS != CANDY_OUT:
+                grid[BLUE_POS[0]][BLUE_POS[1]] = EMPTY
+            if BLUE_POS == CANDY_OUT and RED_POS != CANDY_OUT:
+                grid[RED_POS[0]][RED_POS[1]] = EMPTY
+            if BLUE_POS != CANDY_OUT and RED_POS != CANDY_OUT:
+                grid[RED_POS[0]][RED_POS[1]] = EMPTY
+                grid[BLUE_POS[0]][BLUE_POS[1]] = EMPTY
+            grid[tempRED_POS[0]][tempRED_POS[1]] = RED
+            grid[tempBLUE_POS[0]][tempBLUE_POS[1]] = BLUE
             RED_POS, BLUE_POS = tempRED_POS, tempBLUE_POS
 
 
