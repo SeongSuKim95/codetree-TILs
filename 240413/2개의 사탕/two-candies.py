@@ -1,5 +1,5 @@
 import sys
-# from collections import deque
+from collections import deque
 # sys.stdin = open('input.txt','r')
 N, M = list(map(int,sys.stdin.readline().split()))
 def convertStr(str):
@@ -182,9 +182,6 @@ def dfs(cdir,cnt):
 
     global RED_POS, BLUE_POS, answer
 
-    if cnt > 10 :
-        return
-
     if not isValidTilt():
         return
 
@@ -193,14 +190,15 @@ def dfs(cdir,cnt):
         answer = min(answer,cnt)
         return
 
-    gridTemp = [
-        row[:] for row in grid
-    ]
-
-    tempRED_POS, tempBLUE_POS = RED_POS, BLUE_POS
+    if cnt >= 10 :
+        return
 
     for d in range(4):
         if d != counterDir[cdir]:
+            gridTemp = [
+                row[:] for row in grid
+            ]
+            tempRED_POS, tempBLUE_POS = RED_POS, BLUE_POS
             tiltGrid(d)
             dfs(d,cnt+1)
             for i in range(N):
@@ -209,8 +207,19 @@ def dfs(cdir,cnt):
             RED_POS, BLUE_POS = tempRED_POS, tempBLUE_POS
 
 
-for i in range(4):
-    dfs(i,0)
+for k in range(4):
+    gridTemp = [
+        row[:] for row in grid
+    ]
+    tempRED_POS, tempBLUE_POS = RED_POS, BLUE_POS
+
+    tiltGrid(k)
+    dfs(k,1)
+
+    for i in range(N):
+        for j in range(M):
+            grid[i][j] = gridTemp[i][j]
+    RED_POS, BLUE_POS = tempRED_POS, tempBLUE_POS
 
 if answer == 1e9:
     print(-1)
