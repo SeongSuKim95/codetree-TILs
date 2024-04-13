@@ -116,8 +116,8 @@ def moveBlueFirst(dir,red_pos,blue_pos):
 
 def checkUpward(dir):
     global RED_POS, BLUE_POS
-    red_pos = RED_POS
-    blue_pos = BLUE_POS
+    red_pos = RED_POS[:]
+    blue_pos = BLUE_POS[:]
     if red_pos[1] == blue_pos[1] : # RED 와 BLUE가 같은 열에 있는지 확인
         if red_pos[0] < blue_pos[0]: # 행이 작은 쪽(RED) 먼저 이동
             moveRedFirst(dir,red_pos,blue_pos)
@@ -127,8 +127,8 @@ def checkUpward(dir):
         moveRedFirst(dir,red_pos,blue_pos)
 def checkDownward(dir):
     global RED_POS, BLUE_POS
-    red_pos = RED_POS
-    blue_pos = BLUE_POS
+    red_pos = RED_POS[:]
+    blue_pos = BLUE_POS[:]
     if red_pos[1] == blue_pos[1] : # RED 와 BLUE가 같은 열에 있는지 확인
         if red_pos[0] < blue_pos[0]: # 행이 큰 쪽(BLUE) 먼저 이동
             moveBlueFirst(dir,red_pos,blue_pos)
@@ -139,8 +139,8 @@ def checkDownward(dir):
 
 def checkLeftward(dir):
     global RED_POS, BLUE_POS
-    red_pos = RED_POS
-    blue_pos = BLUE_POS
+    red_pos = RED_POS[:]
+    blue_pos = BLUE_POS[:]
     if red_pos[0] == blue_pos[0] : # RED 와 BLUE가 같은 행에 있는지 확인
         if red_pos[1] < blue_pos[1]: # 열이 작은 쪽(RED) 먼저 이동
             moveRedFirst(dir,red_pos,blue_pos)
@@ -150,8 +150,8 @@ def checkLeftward(dir):
         moveRedFirst(dir,red_pos,blue_pos)
 def checkRightward(dir):
     global RED_POS, BLUE_POS
-    red_pos = RED_POS
-    blue_pos = BLUE_POS
+    red_pos = RED_POS[:]
+    blue_pos = BLUE_POS[:]
     if red_pos[0] == blue_pos[0] : # RED 와 BLUE가 같은 행에 있는지 확인
         if red_pos[1] < blue_pos[1]: # 열이 큰 쪽(BLUE) 먼저 이동
             moveBlueFirst(dir,red_pos,blue_pos)
